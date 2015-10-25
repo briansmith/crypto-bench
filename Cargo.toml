@@ -1,0 +1,24 @@
+[package]
+authors = ["Brian Smith <brian@briansmith.org>"]
+description = "Benchmarks of Rust crypto libraries."
+name = "rust_bench_crypto"
+version = "0.1.0"
+
+[lib]
+name = "rust_bench_crypto"
+
+[dependencies]
+fastpbkdf2 = "0.1"
+openssl = "0.6"
+rust-crypto = "0.2"
+
+[dependencies.ring]
+git = "https://github.com/briansmith/ring"
+
+[profile.release]
+opt-level = 3
+debug = true
+rpath = false
+lto = true
+debug-assertions = false
+codegen-units = 1
