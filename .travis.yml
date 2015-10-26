@@ -4,6 +4,10 @@ matrix:
   # Run only on nightly now as neither stable nor beta support benchmark tests.
   fast_finish: true
   include:
+    - env: TARGET=x86_64-apple-darwin CC=clang CXX=clang++
+      os: osx
+      rust: nightly
+
     - env: TARGET=x86_64-unknown-linux-gnu CC=gcc-5 CXX=g++-5
       os: linux
       rust: nightly
