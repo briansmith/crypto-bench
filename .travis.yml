@@ -1,4 +1,4 @@
-lang: rust
+language: rust
 sudo: false
 rust:
   # Run only on nightly now as neither stable nor beta support benchmark tests
