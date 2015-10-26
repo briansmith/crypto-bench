@@ -1,8 +1,10 @@
 language: rust
 sudo: false
 rust:
-  # Run only on nightly now as neither stable nor beta support benchmark tests
+  # Run only on nightly now as neither stable nor beta support benchmark tests.
   - nightly
 script:
-  - mkdir -p results
-  - cargo bench | tee "results/$(date +'%Y-%m-%d %H:%M')"
+  # We don't run `cargo bench` because Travis CI isn't a reliable platform for
+  # measuring performance. We run `cargo test` to ensure that changes do not
+  # break the build.
+  - cargo test --release
