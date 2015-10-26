@@ -8,11 +8,18 @@ cargo bench
 ```
 
 You must use Rust Nightly because `cargo bench` is used for these benchmarks,
-and only Right Nightly supports `cargo bench`.
+and only Right Nightly supports `cargo bench`. Note that currently the
+benchmarks do not build for pc-windows-msvc targets because
+[rust-fastpbkdf2 fails to build for pc-windows-msvc](https://github.com/ctz/rust-fastpbkdf2/issues/1)
+and [rust-crypto fails to build for pc-windows-msvc](https://github.com/DaGenix/rust-crypto/issues/324).
+pc-windows-gnu targets are not supported because the pc-windows-gnu targets are
+a dead end.
 
-Note that you don't need to run `cargo build`, and in fact `cargo build` and
-`cargo test` don't do anything useful for this crate. Only `cargo bench` is
-useful.
+You don't need to run `cargo build`, and in fact `cargo build` does not do
+anything useful for this crate.
+
+`cargo test` runs one iteration of every benchmark. This is useful for quickly
+making sure that a change to the benchmarks does not break them.
 
 Note that some crypto libraries only support a subset of the tests.
 
