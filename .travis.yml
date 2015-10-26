@@ -1,10 +1,35 @@
 language: rust
 sudo: false
-rust:
+matrix:
   # Run only on nightly now as neither stable nor beta support benchmark tests.
-  - nightly
+  fast_finish: true
+  include:
+    - env: TARGET=x86_64-unknown-linux-gnu CC=gcc-5 CXX=g++-5
+      os: linux
+      rust: nightly
+      addons:
+        apt:
+          packages:
+            - g++-5
+            - gcc-5
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - env: TARGET=x86_64-unknown-linux-gnu CC=clang-3.6 CXX=clang++-3.6
+      os: linux
+      rust: nightly
+      addons:
+        apt:
+          packages:
+            - clang-3.6
+          sources:
+            - llvm-toolchain-precise-3.6
+            - ubuntu-toolchain-r-test
+
 script:
   # We don't run `cargo bench` because Travis CI isn't a reliable platform for
   # measuring performance. We run `cargo test` to ensure that changes do not
   # break the build.
-  - cargo test --release
+  - $CC --version
+  - $CXX --version
+  - cargo test --release --target=$TARGET --verbose
