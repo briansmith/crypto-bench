@@ -35,7 +35,7 @@ mod octavo {
         let mut out = [0u8; 20];
         let mut ctx = digest::sha1::Sha1::default();
         ctx.update(&input);
-        ctx.result(&mut out[..]);
+        ctx.result(&mut out);
     });
 
     digest_benches!(sha256, ring::digest::SHA256.block_len, input, {
@@ -44,7 +44,7 @@ mod octavo {
         let mut out = [0u8; 32];
         let mut ctx = digest::sha2::Sha256::default();
         ctx.update(&input);
-        ctx.result(&mut out[..]);
+        ctx.result(&mut out);
     });
 
     digest_benches!(sha384, ring::digest::SHA384.block_len, input, {
