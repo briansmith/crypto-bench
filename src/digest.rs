@@ -6,7 +6,9 @@ macro_rules! digest_bench {
         fn $bench_fn_name(b: &mut test::Bencher) {
             let $input = vec![0u8; $input_len];
             let $input = &$input[..];
-            b.iter(|| $calculation)
+            b.iter(|| $calculation);
+
+            b.bytes = $input.len() as u64;
         }
     }
 }

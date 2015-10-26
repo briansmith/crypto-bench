@@ -13,7 +13,7 @@ macro_rules! pbkdf2_bench {
         #[bench]
         fn $bench_fn_name(b: &mut test::Bencher) {
             let mut $out = [0u8; $out_len];
-            b.iter(|| $calculation)
+            b.iter(|| $calculation);
         }
     }
 }
