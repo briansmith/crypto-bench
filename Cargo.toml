@@ -12,6 +12,9 @@ fastpbkdf2 = "0.1"
 openssl = "0.6"
 rust-crypto = "0.2"
 
+[dependencies.octavo]
+git = "https://github.com/libOctavo/octavo"
+
 [dependencies.ring]
 git = "https://github.com/briansmith/ring"
 
