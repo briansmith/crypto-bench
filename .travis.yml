@@ -1,0 +1,8 @@
+lang: rust
+sudo: false
+rust:
+  # Run only on nightly now as neither stable nor beta support benchmark tests
+  - nightly
+script:
+  - mkdir -p results
+  - cargo bench | tee "results/$(date +'%Y-%m-%d %H:%M')"
