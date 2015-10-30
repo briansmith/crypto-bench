@@ -75,7 +75,7 @@ mod rust_fastpbkdf2 {
                                                  &mut out));
 }
 
-mod rust_openssl {
+mod openssl {
     use openssl;
     use super::*;
     use test;

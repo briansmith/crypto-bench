@@ -117,7 +117,7 @@ mod rust_crypto {
     });
 }
 
-mod rust_openssl {
+mod openssl {
     digest_benches!(sha1, ring::digest::SHA1.block_len, input, {
         use openssl::crypto::hash;
         let _ = hash::hash(hash::Type::SHA1, input);
