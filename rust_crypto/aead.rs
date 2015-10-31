@@ -94,6 +94,84 @@ mod seal_in_place {
     aes_gcm_benches!(aes_128_gcm, 128 / 8);
     aes_gcm_benches!(aes_256_gcm, 256 / 8);
 
-    // TODO: mod chacha20_poly1305 { ring_seal_in_place_benches!(&aead::CHACHA20_POLY1305); }
-    // TODO: mod chacha20_poly1305_old { ring_seal_in_place_benches!(&aead::CHACHA20_POLY1305_OLD); }
+    // TODO: chacha20_poly1305 is blocked on
+    // https://github.com/DaGenix/rust-crypto/issues/328
+
+    fn chacha20poly1305(chunk_len: usize, ad: &[u8], b: &mut test::Bencher) {
+        use crypto::chacha20poly1305;
+        use crypto::aead::AeadEncryptor;
+
+        let tag_len = 128 / 8;
+        let key = super::generate_key(32);
+        let mut in_out = vec![0u8; chunk_len + tag_len];
+
+        // rust-crypto doesn't have an encrypt-in-place operation, so we have
+        // to synthesize one by having it write its output to `out` &`tag` and
+        // then copying `out` and `tag` to `in_out`.
+        let mut out = vec![0u8; chunk_len];
+        let mut tag = vec![0u8; tag_len];
+
+        // XXX: This is a little misleading when `ad` isn't empty.
+        b.bytes = chunk_len as u64;
+
+        // rust-crypto's interface for the old ChaCha20-Poly1305 construction
+        // uses 64-bit nonces (typical for the old construction).
+        let nonce = &crypto_bench::aead::NONCE[4..];
+
+        b.iter(|| {
+            let mut encryptor =
+                chacha20poly1305::ChaCha20Poly1305::new(&key, nonce, ad);
+            encryptor.encrypt(&in_out[0..chunk_len], &mut out, &mut tag);
+            // XXX: I doubt this is the fastest way of copying from `Vec`
+            // to `Vec`.
+            for i in 0..chunk_len {
+                in_out[i] = out[i];
+            }
+            for i in 0..tag_len {
+                in_out[chunk_len + i] = tag[i];
+            }
+        });
+    }
+
+    macro_rules! chacha20_poly1305_old_bench {
+        ( $benchmark_name:ident, $chunk_len:expr, $ad:expr ) => {
+            #[bench]
+            fn $benchmark_name(b: &mut test::Bencher) {
+                super::chacha20poly1305($chunk_len, $ad, b);
+            }
+        }
+    }
+
+    macro_rules! chacha20_poly1305_old_benches {
+        ( $name:ident ) => {
+            mod $name {
+                use crypto_bench;
+                use test;
+
+                chacha20_poly1305_old_bench!(
+                    tls12_finished, crypto_bench::aead::TLS12_FINISHED_LEN,
+                    &crypto_bench::aead::TLS12_AD);
+                chacha20_poly1305_old_bench!(
+                    tls13_finished, crypto_bench::aead::TLS13_FINISHED_LEN,
+                    &crypto_bench::aead::TLS12_AD);
+
+                // For comparison with BoringSSL.
+                chacha20_poly1305_old_bench!(tls12_16, 16,
+                                             &crypto_bench::aead::TLS12_AD);
+
+                // ~1 packet of data in TLS.
+                chacha20_poly1305_old_bench!(tls12_1350, 1350,
+                                             &crypto_bench::aead::TLS12_AD);
+                chacha20_poly1305_old_bench!(tls13_1350, 1350,
+                                             &crypto_bench::aead::TLS13_AD);
+
+                chacha20_poly1305_old_bench!(tls12_8192, 8192,
+                                             &crypto_bench::aead::TLS12_AD);
+                chacha20_poly1305_old_bench!(tls13_8192, 8192,
+                                             &crypto_bench::aead::TLS13_AD);
+            }
+        }
+    }
+
+    chacha20_poly1305_old_benches!(chacha20_poly1305_old);
 }
