@@ -2,10 +2,16 @@
 
 ## How to run all the benchmarks for all implementations.
 
+On non-Windows systems:
 ```
 git clone https://github.com/briansmith/crypto-bench && \
 cd cargo-bench && \
 ./cargo_all bench
+```
+
+On Windows:
+```
+git clone https://github.com/briansmith/crypto-bench && cd cargo-bench && cargo_all bench
 ```
 
 You must use Rust Nightly because `cargo bench` is used for these benchmarks,
@@ -14,9 +20,10 @@ and only Right Nightly supports `cargo bench`.
 You don't need to run `cargo build`, and in fact `cargo build` does not do
 anything useful for this crate.
 
-`./cargo_all.sh test` runs one iteration of every benchmark for every
-implementation. This is useful for quickly making sure that a change to the
-benchmarks does not break them. Do this before submitting a pull request.
+`./cargo_all test` (`cargo_all test` on Windows) runs one iteration of every
+benchmark for every implementation. This is useful for quickly making sure that
+a change to the benchmarks does not break them. Do this before submitting a
+pull request.
 
 ## How to run all the benchmarks for a specific crypto library
 
@@ -28,10 +35,11 @@ benchmarks does not break them. Do this before submitting a pull request.
 
 ## How to run other subsets of the benchmarks
 
-`./cargo bench` takes arbitrary substrings of the test names as parameters, so
+`cargo bench` takes arbitrary substrings of the test names as parameters, so
 you can get as specific as you want. For example,
-`./cargo_all bench sha512::_2000` will run just the SHA-512
-benchmark that takes a 2000 byte input, for every implementation.
+`./cargo_all bench sha512::_2000` (`cargo_all bench sha512::_2000 on Windows`)
+will run just the SHA-512 benchmark that takes a 2000 byte input, for every
+implementation.
 
 ## Why does each implementation's benchmark live in a separate crate?
 
