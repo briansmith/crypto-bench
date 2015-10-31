@@ -30,7 +30,7 @@ Use `cargo bench ::<implementation>::`:
 * `cargo bench ::ring::` runs all the tests for [*ring*](https://github.com/briansmith/ring).
 * `cargo bench ::octavo::` runs all the tests for [Octavo](https://github.com/libOctavo/octavo).
 * `cargo bench ::rust_crypto::` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
-* `cargo bench ::rust_fastpbkdf2::` runs all the tests for [rust-fastpbkdf2](https://github.com/ctz/rust-fastpbkdf2).
+* `cargo bench ::fastpbkdf2::` runs all the tests for [rust-fastpbkdf2](https://github.com/ctz/rust-fastpbkdf2).
 * `cargo bench ::openssl::` runs all the tests for [rust-openssl](https://github.com/sfackler/rust-openssl).
 
 ## How to run other subsets of the benchmarks

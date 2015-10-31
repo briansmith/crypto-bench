@@ -57,7 +57,7 @@ mod rust_crypto {
     });
 }
 
-mod rust_fastpbkdf2 {
+mod fastpbkdf2 {
     use fastpbkdf2;
     use super::*;
     use test;
