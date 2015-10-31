@@ -1,0 +1,7 @@
+#!/bin/sh
+
+(cd fastpbkdf2 && cargo $*)
+(cd octavo && cargo $*)
+(cd openssl && cargo $*)
+(cd ring && cargo $*)
+(cd rust_crypto && cargo $*)

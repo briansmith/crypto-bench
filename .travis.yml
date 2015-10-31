@@ -36,4 +36,4 @@ script:
   # break the build.
   - $CC --version
   - $CXX --version
-  - cargo test --release --target=$TARGET --verbose
+  - ./cargo_all test --release --target=$TARGET --verbose

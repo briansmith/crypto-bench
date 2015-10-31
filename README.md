@@ -4,41 +4,46 @@
 
 ```
 git clone https://github.com/briansmith/crypto-bench
-cargo bench
+./cargo_all bench
 ```
 
 You must use Rust Nightly because `cargo bench` is used for these benchmarks,
-and only Right Nightly supports `cargo bench`. Note that currently the
-benchmarks do not build for pc-windows-msvc targets because
-[rust-fastpbkdf2 fails to build for pc-windows-msvc](https://github.com/ctz/rust-fastpbkdf2/issues/1)
-and [rust-crypto fails to build for pc-windows-msvc](https://github.com/DaGenix/rust-crypto/issues/324).
-pc-windows-gnu targets are not supported because the pc-windows-gnu targets are
-a dead end.
+and only Right Nightly supports `cargo bench`.
 
 You don't need to run `cargo build`, and in fact `cargo build` does not do
 anything useful for this crate.
 
-`cargo test` runs one iteration of every benchmark. This is useful for quickly
-making sure that a change to the benchmarks does not break them.
-
-Note that some crypto libraries only support a subset of the tests.
+`./cargo_all.sh test` runs one iteration of every benchmark for every
+implementation. This is useful for quickly making sure that a change to the
+benchmarks does not break them. Do this before submitting a pull request.
 
 ## How to run all the benchmarks for a specific crypto library
 
-Use `cargo bench ::<implementation>::`:
-
-* `cargo bench ::ring::` runs all the tests for [*ring*](https://github.com/briansmith/ring).
-* `cargo bench ::octavo::` runs all the tests for [Octavo](https://github.com/libOctavo/octavo).
-* `cargo bench ::rust_crypto::` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
-* `cargo bench ::fastpbkdf2::` runs all the tests for [rust-fastpbkdf2](https://github.com/ctz/rust-fastpbkdf2).
-* `cargo bench ::openssl::` runs all the tests for [rust-openssl](https://github.com/sfackler/rust-openssl).
+* `(cd fastpbkdf2 && cargo bench)` runs all the tests for [rust-fastpbkdf2](https://github.com/ctz/rust-fastpbkdf2).
+* `(cd octavo && cargo bench)` runs all the tests for [Octavo](https://github.com/libOctavo/octavo).
+* `(cd openssl && cargo bench)` runs all the tests for [rust-openssl](https://github.com/sfackler/rust-openssl).
+* `(cd ring && cargo bench)` runs all the tests for [*ring*](https://github.com/briansmith/ring).
+* `(cd rust_crypto && cargo bench)` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
 
 ## How to run other subsets of the benchmarks
 
-`cargo bench` takes arbitrary substrings of the test names as parameters, so
+`./cargo bench` takes arbitrary substrings of the test names as parameters, so
 you can get as specific as you want. For example,
-`digest::ring::sha512::_2000` will run just the SHA-512
-benchmark that takes a 2000 byte input, just for *ring*.
+`./cargo_all bench sha512::_2000` will run just the SHA-512
+benchmark that takes a 2000 byte input, for every implementation.
+
+## Why does each implementation's benchmark live in a separate crate?
+
+* Not all implementations build and work on all platforms. And, some
+  implementations requre manual configuration (e.g. building/installing some
+  third-party C library) to work. The `cargo_all` scripts keep going on
+  failure, so they'll build/test/benchmark whatever implementations actually
+  work, and skip over the ones that don't. This would be difficult to acheive
+  if all the benchmarks were in one crate.
+
+* Some implementations (*ring* and any of the crates that use OpenSSL) cannot
+  (correctly) coexist in the same program because they define extern C symbols
+  with the same names, but which have different ABIs.
 
 ## How to contribute
 
