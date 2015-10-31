@@ -12,6 +12,7 @@ path = "../crypto_bench"
 
 [dependencies]
 rust-crypto = "0.2"
+rand = "0.3"
 
 # Ensure that the bench, release, and test settings are the same.
 

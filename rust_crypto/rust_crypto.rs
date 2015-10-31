@@ -6,6 +6,10 @@ extern crate test;
 extern crate crypto_bench;
 
 extern crate crypto;
+extern crate rand;
+
+#[cfg(test)]
+mod aead;
 
 #[cfg(test)]
 mod digest {
