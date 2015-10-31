@@ -3,7 +3,8 @@
 ## How to run all the benchmarks for all implementations.
 
 ```
-git clone https://github.com/briansmith/crypto-bench
+git clone https://github.com/briansmith/crypto-bench && \
+cd cargo-bench && \
 ./cargo_all bench
 ```
 
