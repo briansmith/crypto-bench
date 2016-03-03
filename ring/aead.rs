@@ -7,7 +7,7 @@ use test;
 
 fn generate_sealing_key(algorithm: &'static aead::Algorithm)
                         -> Result<aead::SealingKey, ()> {
-    let mut key_bytes = vec![0u8; algorithm.key_len];
+    let mut key_bytes = vec![0u8; algorithm.key_len()];
     try!(rand::fill_secure_random(&mut key_bytes));
     aead::SealingKey::new(algorithm, &key_bytes)
 }
@@ -15,7 +15,7 @@ fn generate_sealing_key(algorithm: &'static aead::Algorithm)
 fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
                        chunk_len: usize, ad: &[u8],
                        b: &mut test::Bencher) {
-    let out_suffix_capacity = algorithm.max_overhead_len;
+    let out_suffix_capacity = algorithm.max_overhead_len();
     let mut in_out = vec![0u8; chunk_len + out_suffix_capacity];
 
     // XXX: This is a little misleading when `ad` isn't empty.
