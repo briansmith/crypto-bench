@@ -35,12 +35,6 @@ mod pbkdf2 {
     use ring::pbkdf2;
     use test;
 
-    pbkdf2_bench!(hmac_sha1, crypto_bench::SHA1_OUTPUT_LEN, out,
-                pbkdf2::derive(&pbkdf2::HMAC_SHA1,
-                                crypto_bench::pbkdf2::ITERATIONS as usize,
-                                &crypto_bench::pbkdf2::SALT,
-                                &crypto_bench::pbkdf2::PASSWORD, &mut out));
-
     pbkdf2_bench!(hmac_sha256, crypto_bench::SHA256_OUTPUT_LEN, out,
                 pbkdf2::derive(&pbkdf2::HMAC_SHA256,
                                 crypto_bench::pbkdf2::ITERATIONS as usize,
