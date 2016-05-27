@@ -2,17 +2,19 @@
 // boundaries. Should we?
 
 use crypto_bench;
-use ring::{aead, rand};
+use ring::aead;
+use ring::rand::SecureRandom;
 use test;
 
-fn generate_sealing_key(algorithm: &'static aead::Algorithm)
+fn generate_sealing_key(algorithm: &'static aead::Algorithm, rng: &SecureRandom)
                         -> Result<aead::SealingKey, ()> {
     let mut key_bytes = vec![0u8; algorithm.key_len()];
-    try!(rand::fill_secure_random(&mut key_bytes));
+    try!(rng.fill(&mut key_bytes));
     aead::SealingKey::new(algorithm, &key_bytes)
 }
 
 fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
+                       rng: &SecureRandom,
                        chunk_len: usize, ad: &[u8],
                        b: &mut test::Bencher) {
     let out_suffix_capacity = algorithm.max_overhead_len();
@@ -21,7 +23,7 @@ fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
     // XXX: This is a little misleading when `ad` isn't empty.
     b.bytes = chunk_len as u64;
 
-    let key = generate_sealing_key(algorithm).unwrap();
+    let key = generate_sealing_key(algorithm, rng).unwrap();
     b.iter(|| {
         aead::seal_in_place(&key, &crypto_bench::aead::NONCE,
                             &mut in_out, out_suffix_capacity,
@@ -34,8 +36,10 @@ macro_rules! ring_seal_in_place_bench {
         #[bench]
         fn $benchmark_name(b: &mut test::Bencher) {
             use ring::aead;
+            use ring::rand::SystemRandom;
             use super::super::seal_in_place_bench;
-            seal_in_place_bench($algorithm, $chunk_len, $ad, b);
+            let rng = SystemRandom::new();
+            seal_in_place_bench($algorithm, &rng, $chunk_len, $ad, b);
         }
     }
 }
