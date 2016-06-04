@@ -7,10 +7,8 @@ extern crate crypto_bench;
 
 extern crate ring;
 
-#[cfg(test)]
 mod aead;
 
-#[cfg(test)]
 mod agreement {
     macro_rules! ring_agreement_bneches {
         ( $name:ident, $alg:expr) => {
@@ -87,7 +85,6 @@ mod agreement {
 }
 
 
-#[cfg(test)]
 mod digest {
     macro_rules! ring_digest_benches {
         ( $name:ident, $algorithm:expr) => {
@@ -106,7 +103,6 @@ mod digest {
     ring_digest_benches!(sha512, &digest::SHA512);
 }
 
-#[cfg(test)]
 mod pbkdf2 {
     use crypto_bench;
     use ring::pbkdf2;

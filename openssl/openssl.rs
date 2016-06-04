@@ -20,7 +20,6 @@ macro_rules! openssl_digest_benches {
     }
 }
 
-#[cfg(test)]
 mod digest {
     openssl_digest_benches!(sha1, crypto_bench::SHA1_BLOCK_LEN,
                             hash::Type::SHA1);
@@ -32,7 +31,6 @@ mod digest {
                             hash::Type::SHA512);
 }
 
-#[cfg(test)]
 mod pbkdf2 {
     use crypto_bench;
     use openssl;

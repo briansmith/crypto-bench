@@ -7,7 +7,6 @@ extern crate crypto_bench;
 
 extern crate fastpbkdf2;
 
-#[cfg(test)]
 mod pbkdf2 {
     use crypto_bench;
     use fastpbkdf2;

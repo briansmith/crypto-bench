@@ -8,10 +8,8 @@ extern crate crypto_bench;
 extern crate crypto;
 extern crate rand;
 
-#[cfg(test)]
 mod aead;
 
-#[cfg(test)]
 mod digest {
     macro_rules! rust_crypto_digest_benches {
         ( $name:ident, $block_len:expr, $output_len:expr, $digest:expr) => {
@@ -44,7 +42,6 @@ mod digest {
                                 crypto::sha2::Sha512::new());
 }
 
-#[cfg(test)]
 mod pbkdf2 {
     use crypto::{hmac, pbkdf2, sha1, sha2};
     use crypto_bench;

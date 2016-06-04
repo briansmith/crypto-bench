@@ -7,7 +7,6 @@ extern crate crypto_bench;
 
 extern crate octavo;
 
-#[cfg(test)]
 mod digest {
     macro_rules! octavo_digest_benches {
         ( $name:ident, $block_len:expr, $output_len:expr, $digest:expr) => {
