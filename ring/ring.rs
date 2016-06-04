@@ -11,6 +11,83 @@ extern crate ring;
 mod aead;
 
 #[cfg(test)]
+mod agreement {
+    macro_rules! ring_agreement_bneches {
+        ( $name:ident, $alg:expr) => {
+            mod $name {
+                use ring::{agreement, rand};
+                use ring::input::Input;
+                use test;
+
+                // Generate a new private key and compute the public key.
+                // Although these are separate steps in *ring*, in other APIs
+                // they are a single step.
+                #[bench]
+                fn generate_key_pair(b: &mut test::Bencher) {
+                    let rng = rand::SystemRandom::new();
+                    b.iter(|| {
+                        let private_key = agreement::EphemeralPrivateKey::
+                                            generate($alg, &rng).unwrap();
+                        let mut pub_key = [0; agreement::PUBLIC_KEY_MAX_LEN];
+                        let pub_key =
+                            &mut pub_key[..private_key.public_key_len()];
+                        private_key.compute_public_key(pub_key).unwrap();
+                    });
+                }
+
+                #[bench]
+                fn generate_private_key(b: &mut test::Bencher) {
+                    let rng = rand::SystemRandom::new();
+                    b.iter(|| {
+                        let _ = agreement::EphemeralPrivateKey::
+                                    generate($alg, &rng).unwrap();
+                    });
+                }
+
+                // XXX: Because ring::agreement::agree_ephemeral moves its
+                // private key argument, we cannot measure
+                // `agreement::agree_ephemeral` on its own using the Rust
+                // `Bencher` interface. To get an idea of its performance,
+                // subtract the timing of `generate_private_key` from the
+                // timing of this function.
+                #[bench]
+                fn generate_key_pair_and_agree_ephemeral(b: &mut test::Bencher) {
+                    let rng = rand::SystemRandom::new();
+
+                    // These operations are done by the peer.
+                    let b_private =
+                        agreement::EphemeralPrivateKey::generate($alg, &rng)
+                            .unwrap();
+                    let mut b_public = [0; agreement::PUBLIC_KEY_MAX_LEN];
+                    let b_public =
+                        &mut b_public[..b_private.public_key_len()];
+                    b_private.compute_public_key(b_public).unwrap();
+
+                    b.iter(|| {
+                        // These operations are all done in the
+                        // `generate_key_pair` step.
+                        let a_private =
+                            agreement::EphemeralPrivateKey::generate($alg, &rng)
+                                .unwrap();
+
+                        let b_public = Input::new(b_public).unwrap();
+                        agreement::agree_ephemeral(a_private, $alg, b_public,
+                                                   (), |_| {
+                            Ok(())
+                        }).unwrap();
+                    });
+                }
+            }
+        }
+    }
+
+    ring_agreement_bneches!(p256, &agreement::ECDH_P256);
+    ring_agreement_bneches!(p384, &agreement::ECDH_P384);
+    ring_agreement_bneches!(x25519, &agreement::X25519);
+}
+
+
+#[cfg(test)]
 mod digest {
     macro_rules! ring_digest_benches {
         ( $name:ident, $algorithm:expr) => {
