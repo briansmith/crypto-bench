@@ -10,7 +10,7 @@ extern crate ring;
 mod aead;
 
 mod agreement {
-    macro_rules! ring_agreement_bneches {
+    macro_rules! ring_agreement_benches {
         ( $name:ident, $alg:expr) => {
             mod $name {
                 use ring::{agreement, rand};
@@ -79,9 +79,9 @@ mod agreement {
         }
     }
 
-    ring_agreement_bneches!(p256, &agreement::ECDH_P256);
-    ring_agreement_bneches!(p384, &agreement::ECDH_P384);
-    ring_agreement_bneches!(x25519, &agreement::X25519);
+    ring_agreement_benches!(p256, &agreement::ECDH_P256);
+    ring_agreement_benches!(p384, &agreement::ECDH_P384);
+    ring_agreement_benches!(x25519, &agreement::X25519);
 }
 
 
