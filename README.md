@@ -24,6 +24,7 @@ Benchmarks for Rust crypto libraries
 | Ed25519 (Curve25519) signing                 |                    |                    |                    |                      |                        |                         |             |                       |
 | RSA signing (SHA&#x2011;1 & SHA&#x2011;2)    |                    |                    |                    |                      |                        |                         |             |                       |
 
+* fastpbkdf2 is also benchmarked, for PBKDF2 only.
 * "Suite B" refers the the P-256 and P-384 elliptic curves.
 * "SHA-2" refers to SHA-256, SHA-384, and SHA-512.
 
