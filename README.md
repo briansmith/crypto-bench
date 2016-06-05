@@ -63,13 +63,13 @@ they use Rust's built-in benchmarking feature, and that feature is marked
 On non-Windows systems:
 ```
 git clone https://github.com/briansmith/crypto-bench && \
-cd cargo-bench && \
+cd crypto-bench && \
 ./cargo_all bench
 ```
 
 On Windows:
 ```
-git clone https://github.com/briansmith/crypto-bench && cd cargo-bench && cargo_all bench
+git clone https://github.com/briansmith/crypto-bench && cd crypto-bench && cargo_all bench
 ```
 
 You must use Rust Nightly because `cargo bench` is used for these benchmarks,
