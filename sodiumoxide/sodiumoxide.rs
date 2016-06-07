@@ -41,16 +41,17 @@ mod aead {
                 b.bytes = $input_len;
                 let key = secretbox::gen_key();
                 let nonce = secretbox::gen_nonce();
-                let mut plaintext = vec![0u8; $input_len];
+                // XXX: secretbox doesn't support in place encryption, so
+                // we explicitly memcpy to have the same overhead as
+                // other benchmarks.
+                // secretbox will add at most MACBYTES to the result length,
+                // so that lets us know how to build a buffer big enough
+                // for both input and output.
+                let mut in_out = vec![0u8; $input_len + secretbox::MACBYTES];
                 b.iter(|| {
-                    let out = seal(&plaintext, &nonce, &key);
-                    // XXX: secretbox doesn't support in place encryption, so
-                    // fake it until we change this to use the aead encrypt
-                    // function directly.
-                    // out is a bit larger than plaintext. This ignores the
-                    // bytes in the mismatch.
-                    for i in 0..plaintext.len() {
-                        plaintext[i] = out[i];
+                    let out = seal(&in_out[0..$input_len], &nonce, &key);
+                    for i in 0..out.len() {
+                        in_out[i] = out[i];
                     }
                     out
                 });
