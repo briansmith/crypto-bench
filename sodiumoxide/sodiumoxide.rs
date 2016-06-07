@@ -21,12 +21,12 @@ mod digest {
         }
     }
 
-    sodiumoxide_digest_benches!(sha256, crypto_bench::SHA256_BLOCK_LEN,
-                         crypto_bench::SHA256_OUTPUT_LEN,
-                         sodiumoxide::crypto::hash::sha256::hash);
-    sodiumoxide_digest_benches!(sha512, crypto_bench::SHA512_BLOCK_LEN,
-                         crypto_bench::SHA512_OUTPUT_LEN,
-                         sodiumoxide::crypto::hash::sha512::hash);
+    sodiumoxide_digest_benches!(
+        sha256, crypto_bench::SHA256_BLOCK_LEN, crypto_bench::SHA256_OUTPUT_LEN,
+        sodiumoxide::crypto::hash::sha256::hash);
+    sodiumoxide_digest_benches!(
+        sha512, crypto_bench::SHA512_BLOCK_LEN, crypto_bench::SHA512_OUTPUT_LEN,
+        sodiumoxide::crypto::hash::sha512::hash);
 }
 
 mod aead {
@@ -49,10 +49,13 @@ mod aead {
         }
     }
 
-    sodiumoxide_aead_bench!(xsalsa20poly1305_16, 16,
-                    sodiumoxide::crypto::secretbox::xsalsa20poly1305::seal);
-    sodiumoxide_aead_bench!(xsalsa20poly1305_1350, 1350,
-                    sodiumoxide::crypto::secretbox::xsalsa20poly1305::seal);
-    sodiumoxide_aead_bench!(xsalsa20poly1305_8192, 8192,
-                    sodiumoxide::crypto::secretbox::xsalsa20poly1305::seal);
+    sodiumoxide_aead_bench!(
+        xsalsa20poly1305_16, 16,
+        sodiumoxide::crypto::secretbox::xsalsa20poly1305::seal);
+    sodiumoxide_aead_bench!(
+        xsalsa20poly1305_1350, 1350,
+        sodiumoxide::crypto::secretbox::xsalsa20poly1305::seal);
+    sodiumoxide_aead_bench!(
+        xsalsa20poly1305_8192, 8192,
+        sodiumoxide::crypto::secretbox::xsalsa20poly1305::seal);
 }
