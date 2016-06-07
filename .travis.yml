@@ -19,6 +19,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
+install:
+  # libsodium is not yet whitelisted for use via the TravisCI apt addon, so we
+  # install it manually.
+  - wget https://github.com/jedisct1/libsodium/releases/download/1.0.10/libsodium-1.0.10.tar.gz
+  - tar xvfz libsodium-1.0.10.tar.gz
+  - cd libsodium-1.0.10 && ./configure --prefix=$HOME/installed_libsodium && make && make install && cd ..
+  - export PKG_CONFIG_PATH=$HOME/installed_libsodium/lib/pkgconfig:$PKG_CONFIG_PATH
+  - export LD_LIBRARY_PATH=$HOME/installed_libsodium/lib:$LD_LIBRARY_PATH
+
 script:
   # We don't run `cargo bench` because Travis CI isn't a reliable platform for
   # measuring performance. We run `cargo test` to ensure that changes do not

@@ -17,3 +17,7 @@ POPD
 PUSHD rust_crypto
 cargo %*
 POPD
+
+PUSHD sodiumoxide
+cargo %*
+POPD

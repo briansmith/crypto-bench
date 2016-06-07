@@ -8,11 +8,12 @@ Benchmarks for Rust crypto libraries
 
 |                                              |       *ring*       |       Octavo       |     rust-crypto    | rust-nettle (Nettle) | rust-openssl (OpenSSL) | sodiumoxide (libsodium) | Windows CNG | Mac/iOS Common Crypto |
 |----------------------------------------------|:------------------:|:------------------:|:------------------:|----------------------|:----------------------:|:-----------------------:|:-----------:|:---------------------:|
-| SHA&#x2011;1 & SHA&#x2011;2                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |                      | :white_check_mark:     |                         |             |                       |
+| SHA&#x2011;1 & SHA&#x2011;2                  | :white_check_mark: | :white_check_mark: | :white_check_mark: |                      | :white_check_mark:     | SHA-{256,512} only      |             |                       |
 | HMAC (SHA&#x2011;1 & SHA&#x2011;2)           |                    |                    |                    |                      |                        |                         |             |                       |
 | PBKDF2 (SHA&#x2011;1 & SHA&#x2011;2)         | :white_check_mark: |                    | :white_check_mark: |                      | SHA-1 only             |                         |             |                       |
 | AES&#x2011;128&#x2011;GCM & AES&#x2011;256&#x2011;GCM | :white_check_mark: |           | :white_check_mark: |                      |                        |                         |             |                       |
 | ChaCha20&#x2011;Poly1305                     | :white_check_mark: |                    | :white_check_mark: |                      |                        |                         |             |                       |
+| Salsa20&#x2011;Poly1305                      |                    |                    |                    |                      |                        | :white_check_mark:      |             |                       |
 | ECDH (Suite B) key exchange                  | :white_check_mark: |                    |                    |                      |                        |                         |             |                       |
 | X25519 (Curve25519) key exchange             | :white_check_mark: |                    |                    |                      |                        |                         |             |                       |
 | Random Byte Generation                       |                    |                    |                    |                      |                        |                         |             |                       |
@@ -92,6 +93,7 @@ pull request.
 * `(cd openssl && cargo bench)` runs all the tests for [rust-openssl](https://github.com/sfackler/rust-openssl).
 * `(cd ring && cargo bench)` runs all the tests for [*ring*](https://github.com/briansmith/ring).
 * `(cd rust_crypto && cargo bench)` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
+* `(cd sodiumoxide && cargo bench)` runs all the tests for [sodiumoxide](https://github.com/dnaq/sodiumoxide).
 
 
 
