@@ -41,9 +41,18 @@ mod aead {
                 b.bytes = $input_len;
                 let key = secretbox::gen_key();
                 let nonce = secretbox::gen_nonce();
-                let plaintext = [0u8; $input_len];
+                let mut plaintext = vec![0u8; $input_len];
                 b.iter(|| {
-                    seal(&plaintext, &nonce, &key)
+                    let out = seal(&plaintext, &nonce, &key);
+                    // XXX: secretbox doesn't support in place encryption, so
+                    // fake it until we change this to use the aead encrypt
+                    // function directly.
+                    // out is a bit larger than plaintext. This ignores the
+                    // bytes in the mismatch.
+                    for i in 0..plaintext.len() {
+                        plaintext[i] = out[i];
+                    }
+                    out
                 });
             }
         }
