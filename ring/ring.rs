@@ -6,6 +6,7 @@ extern crate test;
 extern crate crypto_bench;
 
 extern crate ring;
+extern crate untrusted;
 
 mod aead;
 
@@ -14,7 +15,7 @@ mod agreement {
         ( $name:ident, $alg:expr) => {
             mod $name {
                 use ring::{agreement, rand};
-                use ring::input::Input;
+                use untrusted;
                 use test;
 
                 // Generate a new private key and compute the public key.
@@ -68,7 +69,7 @@ mod agreement {
                             agreement::EphemeralPrivateKey::generate($alg, &rng)
                                 .unwrap();
 
-                        let b_public = Input::new(b_public).unwrap();
+                        let b_public = untrusted::Input::new(b_public).unwrap();
                         agreement::agree_ephemeral(a_private, $alg, b_public,
                                                    (), |_| {
                             Ok(())
