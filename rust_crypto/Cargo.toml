@@ -11,8 +11,8 @@ path = "rust_crypto.rs"
 path = "../crypto_bench"
 
 [dependencies]
-rust-crypto = "0.2"
-rand = "0.3"
+rust-crypto = { git = "https://github.com/DaGenix/rust-crypto" }
+rand = "0.3.14"
 
 # Ensure that the bench, release, and test settings are the same.
 

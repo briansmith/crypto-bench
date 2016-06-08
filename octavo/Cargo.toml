@@ -7,11 +7,9 @@ version = "0.1.0"
 name = "crypto_bench_octavo"
 path = "octavo.rs"
 
-[dependencies.crypto_bench]
-path = "../crypto_bench"
-
-[dependencies.octavo]
-git = "https://github.com/libOctavo/octavo"
+[dependencies]
+crypto_bench = { path = "../crypto_bench" }
+octavo = { git = "https://github.com/libOctavo/octavo" }
 
 # Ensure that the bench, release, and test settings are the same.
 
