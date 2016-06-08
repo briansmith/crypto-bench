@@ -10,6 +10,60 @@ extern crate rand;
 
 mod aead;
 
+mod agreement {
+    mod x25519 {
+        use crypto::curve25519::{curve25519_base, curve25519};
+        use test;
+
+        // Generate a new private key and compute the public key.
+        // Although these are separate steps in *ring*, in other APIs
+        // they are a single step.
+        #[bench]
+        fn generate_key_pair(b: &mut test::Bencher) {
+            use rand::{OsRng, Rng};
+            let mut rng = OsRng::new().ok().unwrap();
+
+            b.iter(|| {
+                let mut private_key = [0u8; 32];
+                rng.fill_bytes(&mut private_key);
+                curve25519_base(&private_key)
+            });
+        }
+
+        #[bench]
+        fn generate_private_key(b: &mut test::Bencher) {
+            use rand::{OsRng, Rng};
+            let mut rng = OsRng::new().ok().unwrap();
+
+            b.iter(|| {
+                let mut private_key = [0u8; 32];
+                rng.fill_bytes(&mut private_key);
+            });
+        }
+
+        // See the *ring* benchmarks for an explanation of why we don't
+        // measure just the `agree_ephemeral` part.
+        #[bench]
+        fn generate_key_pair_and_agree_ephemeral(b: &mut test::Bencher) {
+            use rand::{OsRng, Rng};
+            let mut rng = OsRng::new().ok().unwrap();
+
+            // These operations are done by the peer.
+            let mut b_private = [0u8; 32];
+            rng.fill_bytes(&mut b_private);
+            let b_public = curve25519_base(&b_private);
+
+            b.iter(|| {
+                let mut a_private = [0u8; 32];
+                rng.fill_bytes(&mut a_private);
+                let a_public = curve25519_base(&a_private);
+
+                curve25519(&a_private, &b_public)
+            });
+        }
+    }
+}
+
 mod digest {
     macro_rules! rust_crypto_digest_benches {
         ( $name:ident, $block_len:expr, $output_len:expr, $digest:expr) => {
