@@ -64,12 +64,13 @@ On non-Windows systems:
 ```
 git clone https://github.com/briansmith/crypto-bench && \
 cd crypto-bench && \
+./cargo_all update && \
 ./cargo_all bench
 ```
 
 On Windows:
 ```
-git clone https://github.com/briansmith/crypto-bench && cd crypto-bench && cargo_all bench
+git clone https://github.com/briansmith/crypto-bench && cd crypto-bench && cargo_all update && cargo_all bench
 ```
 
 You must use Rust Nightly because `cargo bench` is used for these benchmarks,
@@ -83,6 +84,8 @@ benchmark for every implementation. This is useful for quickly making sure that
 a change to the benchmarks does not break them. Do this before submitting a
 pull request.
 
+`./cargo_all update` is useful for updating all the libraries to the latest
+version.
 
 
 ## How to run all the benchmarks for a specific crypto library
