@@ -54,10 +54,12 @@ mod agreement {
             let b_public = curve25519_base(&b_private);
 
             b.iter(|| {
+                // Generate key pair.
                 let mut a_private = [0u8; 32];
                 rng.fill_bytes(&mut a_private);
-                let a_public = curve25519_base(&a_private);
+                let _a_public = curve25519_base(&a_private);
 
+                // Key agreement.
                 curve25519(&a_private, &b_public)
             });
         }
