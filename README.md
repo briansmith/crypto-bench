@@ -21,7 +21,7 @@ Benchmarks for Rust crypto libraries
 | Ed25519 signature verification               | In Progress (@briansmith) |             | In Progress (@briansmith) |               |                        |                         |             |                       |
 | RSA signature verification                   | In Progress (@briansmith) |             |                    |                      |                        |                         |             |                       |
 | ECDSA signing (Suite B with SHA&#x2011;1 & SHA&#x2011;2) |        |                    |                    |                      |                        |                         |             |                       |
-| Ed25519 (Curve25519) signing                 | :white_check_mark: |                    |                    |                      |                        |                         |             |                       |
+| Ed25519 (Curve25519) signing                 | :white_check_mark: |                    | :white_check_mark: |                      |                        |                         |             |                       |
 | RSA signing (SHA&#x2011;1 & SHA&#x2011;2)    |                    |                    |                    |                      |                        |                         |             |                       |
 
 * fastpbkdf2 is also benchmarked, for PBKDF2 only.

@@ -124,3 +124,37 @@ mod pbkdf2 {
                        crypto_bench::pbkdf2::ITERATIONS, &mut out);
     });
 }
+
+mod signature {
+    mod ed25519 {
+        use crypto::ed25519::{keypair, signature};
+        use rand::{OsRng, Rng};
+        use test;
+
+        #[bench]
+        fn generate_key_pair(b: &mut test::Bencher) {
+            let mut rng = OsRng::new().ok().unwrap();
+
+            b.iter(|| {
+                let mut seed = [0u8; 32];
+                rng.fill_bytes(&mut seed);
+                let _ = keypair(&seed);
+            });
+        }
+
+        // We're interested in the timing of the Ed25519 operation, not the
+        // timing of the hashing, so sign an empty message to minimize the time
+        // spent hashing.
+        #[bench]
+        fn sign_empty(b: &mut test::Bencher) {
+            let mut rng = OsRng::new().ok().unwrap();
+            let mut seed = [0u8; 32];
+            rng.fill_bytes(&mut seed);
+            let (private_key, _) = keypair(&seed);
+
+            b.iter(|| {
+                let _  = signature(b"", &private_key[..]);
+            });
+        }
+    }
+}
