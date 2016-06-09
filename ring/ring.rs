@@ -121,3 +121,31 @@ mod pbkdf2 {
                                  crypto_bench::pbkdf2::SALT,
                                  crypto_bench::pbkdf2::PASSWORD, &mut out));
 }
+
+mod signature {
+    mod ed25519 {
+        use ring::{rand, signature};
+        use test;
+
+        #[bench]
+        fn generate_key_pair(b: &mut test::Bencher) {
+            let rng = rand::SystemRandom::new();
+            b.iter(|| {
+                signature::Ed25519KeyPair::generate(&rng).unwrap();
+            });
+        }
+
+        // We're interested in the timing of the Ed25519 operation, not the
+        // timing of the hashing, so sign an empty message to minimize the time
+        // spent hashing.
+        #[bench]
+        fn sign_empty(b: &mut test::Bencher) {
+            let rng = rand::SystemRandom::new();
+            let key_pair = signature::Ed25519KeyPair::generate(&rng).unwrap();
+            b.iter(|| {
+                let signature = key_pair.sign(b"");
+                let _ = signature.as_slice();
+            });
+        }
+    }
+}
