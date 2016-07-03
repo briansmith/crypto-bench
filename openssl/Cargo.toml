@@ -11,7 +11,8 @@ path = "openssl.rs"
 path = "../crypto_bench"
 
 [dependencies]
-openssl = "0.6"
+openssl = { git = "https://github.com/sfackler/rust-openssl" }
+
 
 # Ensure that the bench, release, and test settings are the same.
 
