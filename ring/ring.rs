@@ -69,7 +69,7 @@ mod agreement {
                             agreement::EphemeralPrivateKey::generate($alg, &rng)
                                 .unwrap();
 
-                        let b_public = untrusted::Input::new(b_public).unwrap();
+                        let b_public = untrusted::Input::from(b_public);
                         agreement::agree_ephemeral(a_private, $alg, b_public,
                                                    (), |_| {
                             Ok(())
