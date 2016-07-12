@@ -68,6 +68,10 @@ mod agreement {
                         let a_private =
                             agreement::EphemeralPrivateKey::generate($alg, &rng)
                                 .unwrap();
+                        let mut a_public = [0; agreement::PUBLIC_KEY_MAX_LEN];
+                        let a_public =
+                            &mut a_public[..a_private.public_key_len()];
+                        a_private.compute_public_key(a_public).unwrap();
 
                         let b_public = untrusted::Input::from(b_public);
                         agreement::agree_ephemeral(a_private, $alg, b_public,
