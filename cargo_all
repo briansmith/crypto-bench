@@ -1,5 +1,8 @@
 #!/bin/sh
 
+if test `uname -s` = Darwin; then
+    (cd commoncrypto && cargo $*)
+fi
 (cd fastpbkdf2 && cargo $*)
 (cd octavo && cargo $*)
 (cd openssl && cargo $*)
