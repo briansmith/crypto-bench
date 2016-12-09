@@ -9,8 +9,8 @@ use test;
 fn generate_sealing_key(algorithm: &'static aead::Algorithm, rng: &SecureRandom)
                         -> Result<aead::SealingKey, ()> {
     let mut key_bytes = vec![0u8; algorithm.key_len()];
-    try!(rng.fill(&mut key_bytes));
-    aead::SealingKey::new(algorithm, &key_bytes)
+    try!(rng.fill(&mut key_bytes).map_err(|_| ()));
+    aead::SealingKey::new(algorithm, &key_bytes).map_err(|_| ())
 }
 
 fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
@@ -82,6 +82,4 @@ mod seal_in_place {
     ring_seal_in_place_benches!(aes_256_gcm, &aead::AES_256_GCM);
     ring_seal_in_place_benches!(chacha20_poly1305,
                                 &aead::CHACHA20_POLY1305);
-    ring_seal_in_place_benches!(chacha20_poly1305_old,
-                                &aead::CHACHA20_POLY1305_OLD);
 }

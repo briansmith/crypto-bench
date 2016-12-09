@@ -10,7 +10,7 @@ path = "ring.rs"
 [dependencies]
 crypto_bench = { path = "../crypto_bench" }
 ring = { git = "https://github.com/briansmith/ring" }
-untrusted = "0.2"
+untrusted = "0.3.2"
 
 # Ensure that the bench, release, and test settings are the same.
 
