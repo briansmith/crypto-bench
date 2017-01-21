@@ -7,6 +7,57 @@ extern crate crypto_bench;
 
 extern crate sodiumoxide;
 
+mod agreement {
+    mod x25519 {
+        use sodiumoxide::init;
+        use sodiumoxide::randombytes::randombytes_into;
+        use sodiumoxide::crypto::scalarmult;
+        use test::Bencher;
+
+        #[bench]
+        fn generate_key_pair(b: &mut Bencher) {
+            init();
+
+            b.iter(|| {
+                let mut k = [0; scalarmult::SCALARBYTES];
+                randombytes_into(&mut k[..]);
+                let s = scalarmult::Scalar(k);
+
+                scalarmult::scalarmult_base(&s)
+            });
+        }
+
+        #[bench]
+        fn generate_private_key(b: &mut Bencher) {
+            init();
+
+            b.iter(|| {
+                let mut k = [0; scalarmult::SCALARBYTES];
+                randombytes_into(&mut k[..]);
+                scalarmult::Scalar(k)
+            });
+        }
+
+        #[bench]
+        fn generate_key_pair_and_agree_ephemeral(b: &mut Bencher) {
+            init();
+
+            let mut k = [0; scalarmult::SCALARBYTES];
+            randombytes_into(&mut k[..]);
+            let s = scalarmult::Scalar(k);
+
+            b.iter(|| {
+                let mut k1 = [0; scalarmult::SCALARBYTES];
+                randombytes_into(&mut k1[..]);
+                let s1 = scalarmult::Scalar(k1);
+                let e1 = scalarmult::scalarmult_base(&s1);
+
+                scalarmult::scalarmult(&s, &e1)
+            });
+        }
+    }
+}
+
 mod digest {
     macro_rules! sodiumoxide_digest_benches {
         ( $name:ident, $block_len:expr, $output_len:expr, $digester:path) => {

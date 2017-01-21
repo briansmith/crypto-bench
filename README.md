@@ -15,7 +15,7 @@ Benchmarks for Rust crypto libraries
 | ChaCha20&#x2011;Poly1305                     | :white_check_mark: | :white_check_mark: |                      |                        |                         |             |                       |
 | Salsa20&#x2011;Poly1305                      |                    |                    |                      |                        | :white_check_mark:      |             |                       |
 | ECDH (Suite B) key exchange                  | :white_check_mark: |                    |                      |                        |                         |             |                       |
-| X25519 (Curve25519) key exchange             | :white_check_mark: | :white_check_mark: |                      |                        |                         |             |                       |
+| X25519 (Curve25519) key exchange             | :white_check_mark: | :white_check_mark: |                      |                        | :white_check_mark:      |             |                       |
 | Random Byte Generation                       |                    |                    |                      |                        |                         |             |                       |
 | ECDSA (Suite B) signature verification       | In Progress (@briansmith) |             |                      |                        |                         |             |                       |
 | Ed25519 signature verification               | In Progress (@briansmith) | In Progress (@briansmith) |        |                        |                         |             |                       |
