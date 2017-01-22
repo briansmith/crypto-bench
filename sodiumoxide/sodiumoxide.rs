@@ -67,3 +67,33 @@ mod aead {
         xsalsa20poly1305_8192, 8192,
         sodiumoxide::crypto::secretbox::xsalsa20poly1305::seal);
 }
+
+mod signature {
+    mod ed25519 {
+        use sodiumoxide::crypto::sign;
+        use sodiumoxide::init;
+        use test;
+
+        #[bench]
+        fn generate_key_pair(b: &mut test::Bencher) {
+            init();
+
+            b.iter(|| {
+                sign::gen_keypair()
+            });
+        }
+
+        // We're interested in the timing of the Ed25519 operation, not the
+        // timing of the hashing, so sign an empty message to minimize the time
+        // spent hashing.
+        #[bench]
+        fn sign_empty(b: &mut test::Bencher) {
+            init();
+
+            let (_, sk) = sign::gen_keypair();
+            b.iter(|| {
+                sign::sign_detached(b"", &sk)
+            });
+        }
+    }
+}
