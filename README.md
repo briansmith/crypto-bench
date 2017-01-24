@@ -10,7 +10,7 @@ Benchmarks for Rust crypto libraries
 |----------------------------------------------|:------------------:|:------------------:|----------------------|:----------------------:|:-----------------------:|:-----------:|:--------------------:|
 | SHA&#x2011;1 & SHA&#x2011;2                  | :white_check_mark: | :white_check_mark: |                      | :white_check_mark:     | SHA-{256,512} only      |             |  :white_check_mark:  |
 | HMAC (SHA&#x2011;1 & SHA&#x2011;2)           |                    |                    |                      |                        |                         |             |                      |
-| PBKDF2 (SHA&#x2011;1 & SHA&#x2011;2)         | SHA-2 only         | :white_check_mark: |                      | SHA-1 only             |                         |             |                      |
+| PBKDF2 (SHA&#x2011;1 & SHA&#x2011;2)         | SHA-2 only         | :white_check_mark: |                      | SHA-1 only             |                         |             |  :white_check_mark:  |
 | AES&#x2011;128&#x2011;GCM & AES&#x2011;256&#x2011;GCM | :white_check_mark: | :white_check_mark: |                      |                        |                         |             |                      |
 | ChaCha20&#x2011;Poly1305                     | :white_check_mark: | :white_check_mark: |                      |                        |                         |             |                      |
 | Salsa20&#x2011;Poly1305                      |                    |                    |                      |                        | :white_check_mark:      |             |                      |

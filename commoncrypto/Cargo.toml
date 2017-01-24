@@ -11,7 +11,7 @@ path = "commoncrypto.rs"
 path = "../crypto_bench"
 
 [dependencies]
-commoncrypto-sys = "0.1"
+commoncrypto-sys = "0.2"
 
 # Ensure that the bench, release, and test settings are the same.
 
