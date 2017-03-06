@@ -25,9 +25,10 @@ fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
 
     let key = generate_sealing_key(algorithm, rng).unwrap();
     b.iter(|| {
-        aead::seal_in_place(&key, &crypto_bench::aead::NONCE,
-                            &mut in_out, out_suffix_capacity,
-                            ad).unwrap();
+        aead::seal_in_place(&key, &crypto_bench::aead::NONCE, ad, &mut in_out,
+                            out_suffix_capacity).unwrap();
+
+
     });
 }
 
