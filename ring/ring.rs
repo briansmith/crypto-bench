@@ -115,13 +115,13 @@ mod pbkdf2 {
 
     pbkdf2_bench!(hmac_sha256, crypto_bench::SHA256_OUTPUT_LEN, out,
                   pbkdf2::derive(&pbkdf2::HMAC_SHA256,
-                                 crypto_bench::pbkdf2::ITERATIONS as usize,
+                                 crypto_bench::pbkdf2::ITERATIONS,
                                  &crypto_bench::pbkdf2::SALT,
                                  crypto_bench::pbkdf2::PASSWORD, &mut out));
 
     pbkdf2_bench!(hmac_sha512, crypto_bench::SHA512_OUTPUT_LEN, out,
                   pbkdf2::derive(&pbkdf2::HMAC_SHA512,
-                                 crypto_bench::pbkdf2::ITERATIONS as usize,
+                                 crypto_bench::pbkdf2::ITERATIONS,
                                  crypto_bench::pbkdf2::SALT,
                                  crypto_bench::pbkdf2::PASSWORD, &mut out));
 }
