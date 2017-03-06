@@ -17,7 +17,7 @@ fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
                        rng: &SecureRandom,
                        chunk_len: usize, ad: &[u8],
                        b: &mut test::Bencher) {
-    let out_suffix_capacity = algorithm.max_overhead_len();
+    let out_suffix_capacity = algorithm.tag_len();
     let mut in_out = vec![0u8; chunk_len + out_suffix_capacity];
 
     // XXX: This is a little misleading when `ad` isn't empty.
