@@ -128,8 +128,10 @@ mod pbkdf2 {
 
 mod signature {
     mod ed25519 {
+        use ring;
         use ring::{rand, signature};
         use test;
+        use untrusted;
 
         #[bench]
         fn generate_key_pair(b: &mut test::Bencher) {
@@ -149,6 +151,29 @@ mod signature {
             b.iter(|| {
                 let signature = key_pair.sign(b"");
                 let _ = signature.as_slice();
+            });
+        }
+
+        #[bench]
+        fn verify(b: &mut test::Bencher) {
+            // Keep in sync with `src/ec/ed25519_tests.txt` in *ring*
+            ring::test::from_file("ed25519_tests.txt", |_, test_case| {
+                // Suppress unconsumed attributes warning
+                let _private_key = test_case.consume_bytes("PRIV");
+
+                let public_key = test_case.consume_bytes("PUB");
+                let msg = test_case.consume_bytes("MESSAGE");
+                let expected_sig = test_case.consume_bytes("SIG");
+                let public_key = untrusted::Input::from(&public_key);
+                let msg = untrusted::Input::from(&msg);
+                let expected_sig = untrusted::Input::from(&expected_sig);
+
+                b.iter(|| {
+                    signature::verify(&signature::ED25519, public_key, msg,
+                                      expected_sig).is_ok();
+                });
+
+                Ok(())
             });
         }
     }
