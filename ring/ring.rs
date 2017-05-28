@@ -148,7 +148,7 @@ mod signature {
             let key_pair = signature::Ed25519KeyPair::generate(&rng).unwrap();
             b.iter(|| {
                 let signature = key_pair.sign(b"");
-                let _ = signature.as_slice();
+                let _ = signature.as_ref();
             });
         }
     }
