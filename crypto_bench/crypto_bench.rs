@@ -32,6 +32,7 @@ pub const SHA384_BLOCK_LEN: usize = 1024 / 8;
 pub const SHA384_OUTPUT_LEN: usize = 384 / 8;
 pub const SHA512_BLOCK_LEN: usize = 1024 / 8;
 pub const SHA512_OUTPUT_LEN: usize = 512 / 8;
+pub const SHA512_256_OUTPUT_LEN: usize = 256 / 8;
 
 #[macro_export]
 macro_rules! digest_bench {

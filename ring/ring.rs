@@ -110,20 +110,33 @@ mod digest {
 
 mod pbkdf2 {
     use crypto_bench;
-    use ring::pbkdf2;
+    use ring::{digest, pbkdf2};
     use test;
 
     pbkdf2_bench!(hmac_sha256, crypto_bench::SHA256_OUTPUT_LEN, out,
-                  pbkdf2::derive(&pbkdf2::HMAC_SHA256,
+                  pbkdf2::derive(&digest::SHA256,
                                  crypto_bench::pbkdf2::ITERATIONS,
                                  &crypto_bench::pbkdf2::SALT,
                                  crypto_bench::pbkdf2::PASSWORD, &mut out));
 
-    pbkdf2_bench!(hmac_sha512, crypto_bench::SHA512_OUTPUT_LEN, out,
-                  pbkdf2::derive(&pbkdf2::HMAC_SHA512,
+    pbkdf2_bench!(hmac_sha384, crypto_bench::SHA384_OUTPUT_LEN, out,
+                  pbkdf2::derive(&digest::SHA384,
                                  crypto_bench::pbkdf2::ITERATIONS,
                                  crypto_bench::pbkdf2::SALT,
                                  crypto_bench::pbkdf2::PASSWORD, &mut out));
+
+    pbkdf2_bench!(hmac_sha512, crypto_bench::SHA512_OUTPUT_LEN, out,
+                  pbkdf2::derive(&digest::SHA256,
+                                 crypto_bench::pbkdf2::ITERATIONS,
+                                 crypto_bench::pbkdf2::SALT,
+                                 crypto_bench::pbkdf2::PASSWORD, &mut out));
+
+    pbkdf2_bench!(hmac_sha512_256, crypto_bench::SHA512_256_OUTPUT_LEN, out,
+                  pbkdf2::derive(&digest::SHA512_256,
+                                 crypto_bench::pbkdf2::ITERATIONS,
+                                 crypto_bench::pbkdf2::SALT,
+                                 crypto_bench::pbkdf2::PASSWORD, &mut out));
+
 }
 
 mod signature {
