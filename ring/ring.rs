@@ -130,12 +130,13 @@ mod signature {
     mod ed25519 {
         use ring::{rand, signature};
         use test;
+        use untrusted;
 
         #[bench]
         fn generate_key_pair(b: &mut test::Bencher) {
             let rng = rand::SystemRandom::new();
             b.iter(|| {
-                signature::Ed25519KeyPair::generate(&rng).unwrap();
+                signature::Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
             });
         }
 
@@ -145,10 +146,12 @@ mod signature {
         #[bench]
         fn sign_empty(b: &mut test::Bencher) {
             let rng = rand::SystemRandom::new();
-            let key_pair = signature::Ed25519KeyPair::generate(&rng).unwrap();
+            let key_pair = signature::Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
+            let key_pair = signature::Ed25519KeyPair::from_pkcs8(
+                untrusted::Input::from(&key_pair)).unwrap();
             b.iter(|| {
                 let signature = key_pair.sign(b"");
-                let _ = signature.as_slice();
+                let _ = signature.as_ref();
             });
         }
     }
