@@ -6,3 +6,4 @@
 (cd ring && cargo $*)
 (cd rust_crypto && cargo $*)
 (cd sodiumoxide && cargo $*)
+(cd sha1 && cargo $*)

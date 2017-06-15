@@ -21,3 +21,7 @@ POPD
 PUSHD sodiumoxide
 cargo %*
 POPD
+
+PUSHD sha1
+cargo %*
+POPD

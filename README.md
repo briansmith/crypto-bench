@@ -26,6 +26,7 @@ Benchmarks for Rust crypto libraries
 
 * fastpbkdf2 is also benchmarked, for PBKDF2 only.
 * Octavo is also benchmarked, for SHA-1 & SHA-2 only.
+* rust-sha1 is also benchmarked, for SHA-1 only.
 * "Suite B" refers the the P-256 and P-384 elliptic curves.
 * "SHA-2" refers to SHA-256, SHA-384, and SHA-512.
 
@@ -97,6 +98,7 @@ version.
 * `(cd ring && cargo bench)` runs all the tests for [*ring*](https://github.com/briansmith/ring).
 * `(cd rust_crypto && cargo bench)` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
 * `(cd sodiumoxide && cargo bench)` runs all the tests for [sodiumoxide](https://github.com/dnaq/sodiumoxide).
+* `(cd sha1 && cargo bench)` runs all the tests for [sha1](https://github.com/mitsuhiko/rust-sha1).
 
 
 
