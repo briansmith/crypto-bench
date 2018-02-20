@@ -1,16 +1,19 @@
 [package]
-authors = ["Brian Smith <brian@briansmith.org>"]
-name = "crypto_bench_ring"
+authors = ["Yiming Jing <yimingjing.cn@gmail.com>"]
+name = "crypto_bench_wolfssl"
 version = "0.1.0"
+links = "wolfssl"
+build = "build.rs"
 
 [lib]
-name = "crypto_bench_ring"
-path = "ring.rs"
+name = "crypto_bench_wolfssl"
+path = "wolfssl.rs"
 
-[dependencies]
-crypto_bench = { path = "../crypto_bench" }
-ring = { git = "https://github.com/briansmith/ring" }
-untrusted = "0.6.1"
+[dependencies.crypto_bench]
+path = "../crypto_bench"
+
+[build-dependencies]
+bindgen = "0.32.3"
 
 # Ensure that the bench, release, and test settings are the same.
 

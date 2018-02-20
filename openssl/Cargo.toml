@@ -10,6 +10,9 @@ path = "openssl.rs"
 [dependencies.crypto_bench]
 path = "../crypto_bench"
 
+[features]
+openssl_110 = ["openssl/v110"]
+
 [dependencies]
 openssl = { git = "https://github.com/sfackler/rust-openssl" }
 
