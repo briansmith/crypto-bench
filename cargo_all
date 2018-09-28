@@ -1,8 +1,8 @@
 #!/bin/sh
 
-(cd fastpbkdf2 && cargo $*)
-(cd octavo && cargo $*)
-(cd openssl && cargo $*)
-(cd ring && cargo $*)
-(cd rust_crypto && cargo $*)
-(cd sodiumoxide && cargo $*)
+(cd fastpbkdf2 && cargo +nightly $*)
+(cd octavo && cargo +nightly $*)
+(cd openssl && cargo +nightly $*)
+(cd ring && cargo +nightly $*)
+(cd rust_crypto && +nightly cargo $*)
+(cd sodiumoxide && +nightly cargo $*)
