@@ -5,4 +5,5 @@
 (cd openssl && cargo $*)
 (cd ring && cargo $*)
 (cd rust_crypto && cargo $*)
+(cd RustCrypto && cargo + nightly $*)
 (cd sodiumoxide && cargo $*)
