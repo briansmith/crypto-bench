@@ -36,14 +36,6 @@ mod digest {
     rust_crypto_digest_benches!(sha512, crypto_bench::SHA512_BLOCK_LEN,
                                 crypto_bench::SHA512_OUTPUT_LEN,
                                 sha2::Sha512::default());
-    mod sha256digest {
-        use sha2::Digest;
-        use crypto_bench;
-
-        digest_benches!(crypto_bench::SHA256_BLOCK_LEN, input, {
-            let _ = sha2::Sha256::digest(input);
-        });
-    }
 }
 
 /*
