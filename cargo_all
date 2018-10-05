@@ -4,5 +4,6 @@
 (cd octavo && cargo +nightly $*)
 (cd openssl && cargo +nightly $*)
 (cd ring && cargo +nightly $*)
-(cd rust_crypto && cargo +nightly $*)
+#unmaintained (cd rust_crypto && cargo +nightly $*)
 (cd sodiumoxide && cargo +nightly $*)
+(cd RustCrypto && cargo +nightly $*)
