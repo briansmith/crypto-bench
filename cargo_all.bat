@@ -2,10 +2,6 @@ PUSHD fastpbkdf2
 cargo %*
 POPD
 
-PUSHD octavo
-cargo %*
-POPD
-
 PUSHD openssl
 cargo %*
 POPD

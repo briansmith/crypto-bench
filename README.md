@@ -25,7 +25,6 @@ Benchmarks for Rust crypto libraries
 | RSA signing (SHA&#x2011;1 & SHA&#x2011;2)    |                    |                    |                      |                        |                         |             |                       |
 
 * fastpbkdf2 is also benchmarked, for PBKDF2 only.
-* Octavo is also benchmarked, for SHA-1 & SHA-2 only.
 * "Suite B" refers the the P-256 and P-384 elliptic curves.
 * "SHA-2" refers to SHA-256, SHA-384, and SHA-512.
 
@@ -92,7 +91,6 @@ version.
 ## How to run all the benchmarks for a specific crypto library
 
 * `(cd fastpbkdf2 && cargo bench)` runs all the tests for [rust-fastpbkdf2](https://github.com/ctz/rust-fastpbkdf2).
-* `(cd octavo && cargo bench)` runs all the tests for [Octavo](https://github.com/libOctavo/octavo).
 * `(cd openssl && cargo bench)` runs all the tests for [rust-openssl](https://github.com/sfackler/rust-openssl).
 * `(cd ring && cargo bench)` runs all the tests for [*ring*](https://github.com/briansmith/ring).
 * `(cd rust_crypto && cargo bench)` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
