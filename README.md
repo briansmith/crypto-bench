@@ -103,9 +103,11 @@ takes a 2000 byte input, for every implementation.
   implementations requre manual configuration (e.g. building/installing some
   third-party C library) to work.
 
-* Some implementations (*ring* and any of the crates that use OpenSSL) cannot
-  (correctly) coexist in the same program because they define extern C symbols
-  with the same names, but which have different ABIs.
+* Some implementations may not be able to (correctly) coexist in the same
+  program because they define extern C symbols with the same names, but which
+  are not interoperable. (This used to be the case for *ring* and rust-openssl,
+  however *ring* implemented a workaround that allows *ring* to be used
+  alongside other OpenSSL forks.)
 
 
 
