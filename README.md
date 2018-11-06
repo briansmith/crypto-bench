@@ -84,7 +84,7 @@ latest version.
 * `cargo +nightly bench -p crypto_bench_openssl` runs all the tests for [rust-openssl](https://github.com/sfackler/rust-openssl).
 * `cargo +nightly bench -p crypto_bench_ring` runs all the tests for [*ring*](https://github.com/briansmith/ring).
 * `cargo +nightly bench -p crypto_bench_rust_crypto` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
-* `(cargo +nightly bench -p crypto_bench_sodiumoxide)` runs all the tests for [sodiumoxide](https://github.com/dnaq/sodiumoxide).
+* `cargo +nightly bench -p crypto_bench_sodiumoxide` runs all the tests for [sodiumoxide](https://github.com/dnaq/sodiumoxide).
 
 
 
