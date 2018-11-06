@@ -12,29 +12,3 @@ path = "../crypto_bench"
 
 [dependencies]
 fastpbkdf2 = "0.1"
-
-# Ensure that the bench, release, and test settings are the same.
-
-[profile.bench]
-opt-level = 3
-debug = true
-rpath = false
-lto = true
-debug-assertions = false
-codegen-units = 1
-
-[profile.release]
-opt-level = 3
-debug = true
-rpath = false
-lto = true
-debug-assertions = false
-codegen-units = 1
-
-[profile.test]
-opt-level = 3
-debug = true
-rpath = false
-lto = true
-debug-assertions = false
-codegen-units = 1
