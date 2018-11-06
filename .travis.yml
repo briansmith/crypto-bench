@@ -34,4 +34,4 @@ script:
   # break the build.
   - $CC --version
   - $CXX --version
-  - ./cargo_all test --release --target=$TARGET --verbose
+  - cargo bench +nightly --release --target=$TARGET --verbose
