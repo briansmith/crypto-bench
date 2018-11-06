@@ -11,29 +11,3 @@ path = "ring.rs"
 crypto_bench = { path = "../crypto_bench" }
 ring = { git = "https://github.com/briansmith/ring" }
 untrusted = "0.6.1"
-
-# Ensure that the bench, release, and test settings are the same.
-
-[profile.bench]
-opt-level = 3
-debug = true
-rpath = false
-lto = true
-debug-assertions = false
-codegen-units = 1
-
-[profile.release]
-opt-level = 3
-debug = true
-rpath = false
-lto = true
-debug-assertions = false
-codegen-units = 1
-
-[profile.test]
-opt-level = 3
-debug = true
-rpath = false
-lto = true
-debug-assertions = false
-codegen-units = 1

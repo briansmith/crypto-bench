@@ -49,8 +49,8 @@ library changes between versions.
 
 These tools do *not* need to be written in Rust. They can be in Python or
 shell scripts or whatever. I highly recommend just scraping the output of
-`cargo bench` (and/or `./cargo_all bench`) instead of trying to make changes to
-rustc, Cargo, and the Rust standard library. Perfect is the enemy of the good.
+`cargo bench` instead of trying to make changes to rustc, Cargo, and the Rust
+standard library. Perfect is the enemy of the good.
 
 
 
@@ -60,17 +60,8 @@ These benchmarks currently only can be built/run using Nightly Rust because
 they use Rust's built-in benchmarking feature, and that feature is marked
 "unstable" (i.e. "Nightly-only").
 
-On non-Windows systems:
 ```
-git clone https://github.com/briansmith/crypto-bench && \
-cd crypto-bench && \
-./cargo_all update && \
-./cargo_all bench
-```
-
-On Windows:
-```
-git clone https://github.com/briansmith/crypto-bench && cd crypto-bench && cargo_all update && cargo_all bench
+git clone https://github.com/briansmith/crypto-bench && cd crypto-bench && cargo update && cargo +nightly bench
 ```
 
 You must use Rust Nightly because `cargo bench` is used for these benchmarks,
@@ -79,22 +70,21 @@ and only Right Nightly supports `cargo bench`.
 You don't need to run `cargo build`, and in fact `cargo build` does not do
 anything useful for this crate.
 
-`./cargo_all test` (`cargo_all test` on Windows) runs one iteration of every
-benchmark for every implementation. This is useful for quickly making sure that
-a change to the benchmarks does not break them. Do this before submitting a
-pull request.
+`./cargo +nightly test` runs one iteration of every benchmark for every
+implementation. This is useful for quickly making sure that a change to the
+benchmarks does not break them. Do this before submitting a pull request.
 
-`./cargo_all update` is useful for updating all the libraries to the latest
-version.
+`cargo update` in the workspace root will update all the libraries to the
+latest version.
 
 
 ## How to run all the benchmarks for a specific crypto library
 
-* `(cd fastpbkdf2 && cargo bench)` runs all the tests for [rust-fastpbkdf2](https://github.com/ctz/rust-fastpbkdf2).
-* `(cd openssl && cargo bench)` runs all the tests for [rust-openssl](https://github.com/sfackler/rust-openssl).
-* `(cd ring && cargo bench)` runs all the tests for [*ring*](https://github.com/briansmith/ring).
-* `(cd rust_crypto && cargo bench)` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
-* `(cd sodiumoxide && cargo bench)` runs all the tests for [sodiumoxide](https://github.com/dnaq/sodiumoxide).
+* `cargo +nightly bench -p crypto_bench_fastpbkdf2` runs all the tests for [rust-fastpbkdf2](https://github.com/ctz/rust-fastpbkdf2).
+* `cargo +nightly bench -p crypto_bench_openssl` runs all the tests for [rust-openssl](https://github.com/sfackler/rust-openssl).
+* `cargo +nightly bench -p crypto_bench_ring` runs all the tests for [*ring*](https://github.com/briansmith/ring).
+* `cargo +nightly bench -p crypto_bench_rust_crypto` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
+* `(cargo +nightly bench -p crypto_bench_sodiumoxide)` runs all the tests for [sodiumoxide](https://github.com/dnaq/sodiumoxide).
 
 
 
@@ -102,9 +92,8 @@ version.
 
 `cargo bench` takes arbitrary substrings of the test names as parameters, so
 you can get as specific as you want. For example,
-`./cargo_all bench sha512::_2000` (`cargo_all bench sha512::_2000 on Windows`)
-will run just the SHA-512 benchmark that takes a 2000 byte input, for every
-implementation.
+`cargo +nightly bench sha512::_2000` will run just the SHA-512 benchmark that
+takes a 2000 byte input, for every implementation.
 
 
 
@@ -112,10 +101,7 @@ implementation.
 
 * Not all implementations build and work on all platforms. And, some
   implementations requre manual configuration (e.g. building/installing some
-  third-party C library) to work. The `cargo_all` scripts keep going on
-  failure, so they'll build/test/benchmark whatever implementations actually
-  work, and skip over the ones that don't. This would be difficult to acheive
-  if all the benchmarks were in one crate.
+  third-party C library) to work.
 
 * Some implementations (*ring* and any of the crates that use OpenSSL) cannot
   (correctly) coexist in the same program because they define extern C symbols

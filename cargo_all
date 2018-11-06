@@ -1,7 +1,0 @@
-#!/bin/sh
-
-(cd fastpbkdf2 && cargo +nightly $*)
-(cd openssl && cargo +nightly $*)
-(cd ring && cargo +nightly $*)
-(cd rust_crypto && cargo +nightly $*)
-(cd sodiumoxide && cargo +nightly $*)
