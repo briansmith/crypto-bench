@@ -5,6 +5,7 @@ members = [
     "fastpbkdf2",
     "openssl",
     "ring",
+    "RustCrypto",
     "rust_crypto",
     "sodiumoxide",
 ]
