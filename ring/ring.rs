@@ -27,10 +27,7 @@ mod agreement {
                     b.iter(|| {
                         let private_key = agreement::EphemeralPrivateKey::
                                             generate($alg, &rng).unwrap();
-                        let mut pub_key = [0; agreement::PUBLIC_KEY_MAX_LEN];
-                        let pub_key =
-                            &mut pub_key[..private_key.public_key_len()];
-                        private_key.compute_public_key(pub_key).unwrap();
+                        let _ = test::black_box(private_key.compute_public_key().unwrap());
                     });
                 }
 
@@ -57,10 +54,7 @@ mod agreement {
                     let b_private =
                         agreement::EphemeralPrivateKey::generate($alg, &rng)
                             .unwrap();
-                    let mut b_public = [0; agreement::PUBLIC_KEY_MAX_LEN];
-                    let b_public =
-                        &mut b_public[..b_private.public_key_len()];
-                    b_private.compute_public_key(b_public).unwrap();
+                    let b_public = b_private.compute_public_key().unwrap();
 
                     b.iter(|| {
                         // These operations are all done in the
@@ -68,12 +62,8 @@ mod agreement {
                         let a_private =
                             agreement::EphemeralPrivateKey::generate($alg, &rng)
                                 .unwrap();
-                        let mut a_public = [0; agreement::PUBLIC_KEY_MAX_LEN];
-                        let a_public =
-                            &mut a_public[..a_private.public_key_len()];
-                        a_private.compute_public_key(a_public).unwrap();
-
-                        let b_public = untrusted::Input::from(b_public);
+                        let a_public = a_private.compute_public_key().unwrap();
+                        let b_public = untrusted::Input::from(b_public.as_ref());
                         agreement::agree_ephemeral(a_private, $alg, b_public,
                                                    (), |_| {
                             Ok(())
@@ -161,7 +151,7 @@ mod signature {
             let rng = rand::SystemRandom::new();
             let key_pair = signature::Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
             let key_pair = signature::Ed25519KeyPair::from_pkcs8(
-                untrusted::Input::from(&key_pair)).unwrap();
+                untrusted::Input::from(key_pair.as_ref())).unwrap();
             b.iter(|| {
                 let signature = key_pair.sign(b"");
                 let _ = signature.as_ref();

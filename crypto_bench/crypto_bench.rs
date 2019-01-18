@@ -64,12 +64,14 @@ macro_rules! digest_benches {
 }
 
 pub mod pbkdf2 {
+    use std::num::NonZeroU32;
+
     // These values are copied from
     // https://github.com/ctz/rust-fastpbkdf2/tree/master/pbkdf2-bench, except
     // `ITERATIONS` was lowered from `1 << 20` because the benchmarks were
     // excruciatingly slow with 2^20 iterations, and that iteration count isn't
     // realistic for most applications anyway.
-    pub const ITERATIONS: u32 = 100_000;
+    pub const ITERATIONS: NonZeroU32 = unsafe { NonZeroU32::new_unchecked(100_000) };
     pub const PASSWORD: &'static [u8] = b"password";
     pub const PASSWORD_STR: &'static str = "password";
     pub const SALT: &'static [u8] = b"salt";

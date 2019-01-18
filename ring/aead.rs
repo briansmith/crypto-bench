@@ -15,7 +15,7 @@ fn generate_sealing_key(algorithm: &'static aead::Algorithm, rng: &SecureRandom)
 
 fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
                        rng: &SecureRandom,
-                       chunk_len: usize, ad: &[u8],
+                       chunk_len: usize, aad: &[u8],
                        b: &mut test::Bencher) {
     let out_suffix_capacity = algorithm.tag_len();
     let mut in_out = vec![0u8; chunk_len + out_suffix_capacity];
@@ -25,7 +25,9 @@ fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
 
     let key = generate_sealing_key(algorithm, rng).unwrap();
     b.iter(|| {
-        aead::seal_in_place(&key, &crypto_bench::aead::NONCE, ad, &mut in_out,
+        let nonce = aead::Nonce::assume_unique_for_key(crypto_bench::aead::NONCE);
+        let aad = aead::Aad::from(aad);
+        aead::seal_in_place(&key, nonce, aad, &mut in_out,
                             out_suffix_capacity).unwrap();
 
 
