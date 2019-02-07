@@ -9,14 +9,18 @@ mod aead {
     use test;
 
     macro_rules! orion_aead_bench {
-        ( $benchmark_name:ident, $input_len:expr, $ad:expr, $sealer:path ) => {
+        ( $benchmark_name:ident, $input_len:expr, $ad:expr, $sealer:path, $nonce_size: expr) => {
             #[bench]
             fn $benchmark_name(b: &mut test::Bencher) {
                 use $sealer::{seal, SecretKey, Nonce};
                 b.bytes = $input_len as u64;
                 let key = SecretKey::generate().unwrap();
-                let nonce = Nonce::from_slice(&crypto_bench::aead::NONCE).unwrap();
-                
+
+                let nonce = match $nonce_size {
+                    12 => Nonce::from_slice(&crypto_bench::aead::NONCE).unwrap(), // ChaCha20Poly1305.
+                    24 => Nonce::from_slice(&[0u8; 24]).unwrap(), // XChaCha20Poly1305.
+                    _ => panic!("Illegal nonce size passed") 
+                };
                 // XXX: orion does not support in-place encryption,
                 // but copies the result into an out parameter which must be
                 // at least $input_len + 16 in size.
@@ -32,32 +36,64 @@ mod aead {
     orion_aead_bench!(chacha20poly1305_tls12_finished,
                       crypto_bench::aead::TLS12_FINISHED_LEN,
                       &crypto_bench::aead::TLS12_AD,
-                      orion::hazardous::aead::chacha20poly1305);
+                      orion::hazardous::aead::chacha20poly1305,
+                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
     orion_aead_bench!(chacha20poly1305_tls13_finished,
                       crypto_bench::aead::TLS13_FINISHED_LEN,
                       &crypto_bench::aead::TLS13_AD,
-                      orion::hazardous::aead::chacha20poly1305);
+                      orion::hazardous::aead::chacha20poly1305,
+                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
             
     // For comparison with BoringSSL.
-    orion_aead_bench!(chacha20poly1305_tls12_16, 16,
+    orion_aead_bench!(chacha20poly1305_tls12_16,
+                      16,
                       &crypto_bench::aead::TLS12_AD,
-                      orion::hazardous::aead::chacha20poly1305);
+                      orion::hazardous::aead::chacha20poly1305,
+                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
 
     // ~1 packet of data in TLS.
-    orion_aead_bench!(chacha20poly1305_tls12_1350, 1350,
+    orion_aead_bench!(chacha20poly1305_tls12_1350, 
+                      1350,
                       &crypto_bench::aead::TLS12_AD,
-                      orion::hazardous::aead::chacha20poly1305);
-    orion_aead_bench!(chacha20poly1305_tls13_1350, 1350,
+                      orion::hazardous::aead::chacha20poly1305,
+                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+    orion_aead_bench!(chacha20poly1305_tls13_1350,
+                      1350,
                       &crypto_bench::aead::TLS13_AD,
-                      orion::hazardous::aead::chacha20poly1305);
+                      orion::hazardous::aead::chacha20poly1305,
+                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
 
     // For comparison with BoringSSL.
-    orion_aead_bench!(chacha20poly1305_tls12_8192, 8192,
+    orion_aead_bench!(chacha20poly1305_tls12_8192, 
+                      8192,
                       &crypto_bench::aead::TLS12_AD,
-                      orion::hazardous::aead::chacha20poly1305);
-    orion_aead_bench!(chacha20poly1305_tls13_8192, 8192,
+                      orion::hazardous::aead::chacha20poly1305,
+                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+    orion_aead_bench!(chacha20poly1305_tls13_8192,
+                      8192,
                       &crypto_bench::aead::TLS13_AD,
-                      orion::hazardous::aead::chacha20poly1305);
+                      orion::hazardous::aead::chacha20poly1305,
+                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+
+    // XChaCha20Poly1305
+
+    orion_aead_bench!(xchacha20poly1305_16,
+                      16,
+                      &[0u8; 0],
+                      orion::hazardous::aead::xchacha20poly1305,
+                      orion::hazardous::constants::XCHACHA_NONCESIZE);
+
+    orion_aead_bench!(xchacha20poly1305_1350, 
+                      1350,
+                      &[0u8; 0],
+                      orion::hazardous::aead::xchacha20poly1305,
+                      orion::hazardous::constants::XCHACHA_NONCESIZE);
+
+    orion_aead_bench!(xchacha20poly1305_8192, 
+                      8192,
+                      &[0u8; 0],
+                      orion::hazardous::aead::xchacha20poly1305,
+                      orion::hazardous::constants::XCHACHA_NONCESIZE);
 }
 
 mod digest {
@@ -91,8 +127,8 @@ mod pbkdf2 {
                 let mut out = [0u8; $out_len];
                 b.iter(|| {
                     // XXX: Password::from_slice() will process the input
-                    // as an HMAC secret key and is therefore included in
-                    // the benchmarks.
+                    // as an HMAC secret key for subsequent HMAC calls 
+                    // and is therefore included in the benchmarks.
                     let secret = pbkdf2::Password::from_slice($secret).unwrap();
                     pbkdf2::derive_key(&secret, $salt, $iter, &mut out).unwrap();
                 });
