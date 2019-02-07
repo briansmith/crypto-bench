@@ -6,13 +6,13 @@ Benchmarks for Rust crypto libraries
 
 ## Which benchmarks have been written?
 
-|                                              |       *ring*       |     rust-crypto    | rust-nettle (Nettle) | rust-openssl (OpenSSL) | sodiumoxide (libsodium) | Windows CNG | Mac/iOS Common Crypto |
-|----------------------------------------------|:------------------:|:------------------:|----------------------|:----------------------:|:-----------------------:|:-----------:|:---------------------:|
-| SHA&#x2011;1 & SHA&#x2011;2                  | :white_check_mark: | :white_check_mark: |                      | :white_check_mark:     | SHA-{256,512} only      |             |                       |
+|                                              |       *ring*       |     rust-crypto    | rust-nettle (Nettle) | rust-openssl (OpenSSL) | sodiumoxide (libsodium) | Windows CNG | Mac/iOS Common Crypto |    orion      |
+|----------------------------------------------|:------------------:|:------------------:|----------------------|:----------------------:|:-----------------------:|:-----------:|:---------------------:|:----------------------------:|
+| SHA&#x2011;1 & SHA&#x2011;2                  | :white_check_mark: | :white_check_mark: |                      | :white_check_mark:     | SHA-{256,512} only      |             |                       |  SHA-512 only    |
 | HMAC (SHA&#x2011;1 & SHA&#x2011;2)           |                    |                    |                      |                        |                         |             |                       |
-| PBKDF2 (SHA&#x2011;1 & SHA&#x2011;2)         | SHA-2 only         | :white_check_mark: |                      | SHA-1 only             |                         |             |                       |
+| PBKDF2 (SHA&#x2011;1 & SHA&#x2011;2)         | SHA-2 only         | :white_check_mark: |                      | SHA-1 only             |                         |             |                       |  SHA-512 only      |
 | AES&#x2011;128&#x2011;GCM & AES&#x2011;256&#x2011;GCM | :white_check_mark: | :white_check_mark: |                      |                        |                         |             |                       |
-| ChaCha20&#x2011;Poly1305                     | :white_check_mark: | :white_check_mark: |                      |                        |                         |             |                       |
+| ChaCha20&#x2011;Poly1305                     | :white_check_mark: | :white_check_mark: |                      |                        |                         |      |       |           :white_check_mark:            |  |
 | Salsa20&#x2011;Poly1305                      |                    |                    |                      |                        | :white_check_mark:      |             |                       |
 | ECDH (Suite B) key exchange                  | :white_check_mark: |                    |                      |                        |                         |             |                       |
 | X25519 (Curve25519) key exchange             | :white_check_mark: | :white_check_mark: |                      |                        |                         |             |                       |
@@ -85,6 +85,7 @@ latest version.
 * `cargo +nightly bench -p crypto_bench_ring` runs all the tests for [*ring*](https://github.com/briansmith/ring).
 * `cargo +nightly bench -p crypto_bench_rust_crypto` runs all the tests for [rust-crypto](https://github.com/DaGenix/rust-crypto).
 * `cargo +nightly bench -p crypto_bench_sodiumoxide` runs all the tests for [sodiumoxide](https://github.com/dnaq/sodiumoxide).
+* `cargo +nightly bench -p crypto_bench_orion` runs all the tests for [orion](https://github.com/brycx/orion).
 
 
 

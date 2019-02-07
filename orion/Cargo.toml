@@ -1,0 +1,13 @@
+[package]
+name = "crypto_bench_orion"
+version = "0.1.0"
+
+[lib]
+name = "crypto_bench_orion"
+path = "orion.rs"
+
+[dependencies.crypto_bench]
+path = "../crypto_bench"
+
+[dependencies]
+orion = "0.12.5"
