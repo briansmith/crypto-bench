@@ -10,4 +10,4 @@ path = "sodiumoxide.rs"
 path = "../crypto_bench"
 
 [dependencies]
-sodiumoxide = "0.1"
+sodiumoxide = "0.2"
