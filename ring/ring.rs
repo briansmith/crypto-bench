@@ -27,10 +27,7 @@ mod agreement {
                     b.iter(|| {
                         let private_key = agreement::EphemeralPrivateKey::
                                             generate($alg, &rng).unwrap();
-                        let mut pub_key = [0; agreement::PUBLIC_KEY_MAX_LEN];
-                        let pub_key =
-                            &mut pub_key[..private_key.public_key_len()];
-                        private_key.compute_public_key(pub_key).unwrap();
+                        let _pub_key = private_key.compute_public_key().unwrap();
                     });
                 }
 
@@ -57,10 +54,8 @@ mod agreement {
                     let b_private =
                         agreement::EphemeralPrivateKey::generate($alg, &rng)
                             .unwrap();
-                    let mut b_public = [0; agreement::PUBLIC_KEY_MAX_LEN];
-                    let b_public =
-                        &mut b_public[..b_private.public_key_len()];
-                    b_private.compute_public_key(b_public).unwrap();
+                    let b_public = b_private.compute_public_key().unwrap();
+                    let b_public = untrusted::Input::from(&b_public.as_ref());
 
                     b.iter(|| {
                         // These operations are all done in the
@@ -68,14 +63,10 @@ mod agreement {
                         let a_private =
                             agreement::EphemeralPrivateKey::generate($alg, &rng)
                                 .unwrap();
-                        let mut a_public = [0; agreement::PUBLIC_KEY_MAX_LEN];
-                        let a_public =
-                            &mut a_public[..a_private.public_key_len()];
-                        a_private.compute_public_key(a_public).unwrap();
+                        let _a_public = a_private.compute_public_key().unwrap();
 
-                        let b_public = untrusted::Input::from(b_public);
-                        agreement::agree_ephemeral(a_private, $alg, b_public,
-                                                   (), |_| {
+                        agreement::agree_ephemeral(a_private, $alg, b_public, ring::error::Unspecified,
+                                                   |_| {
                             Ok(())
                         }).unwrap();
                     });
@@ -112,31 +103,31 @@ mod pbkdf2 {
     use crypto_bench;
     use ring::{digest, pbkdf2};
     use test;
+    use  std::num::NonZeroU32;
 
     pbkdf2_bench!(hmac_sha256, crypto_bench::SHA256_OUTPUT_LEN, out,
                   pbkdf2::derive(&digest::SHA256,
-                                 crypto_bench::pbkdf2::ITERATIONS,
+                                 NonZeroU32::new(crypto_bench::pbkdf2::ITERATIONS).unwrap(),
                                  &crypto_bench::pbkdf2::SALT,
                                  crypto_bench::pbkdf2::PASSWORD, &mut out));
 
     pbkdf2_bench!(hmac_sha384, crypto_bench::SHA384_OUTPUT_LEN, out,
                   pbkdf2::derive(&digest::SHA384,
-                                 crypto_bench::pbkdf2::ITERATIONS,
+                                 NonZeroU32::new(crypto_bench::pbkdf2::ITERATIONS).unwrap(),
                                  crypto_bench::pbkdf2::SALT,
                                  crypto_bench::pbkdf2::PASSWORD, &mut out));
 
     pbkdf2_bench!(hmac_sha512, crypto_bench::SHA512_OUTPUT_LEN, out,
                   pbkdf2::derive(&digest::SHA256,
-                                 crypto_bench::pbkdf2::ITERATIONS,
+                                 NonZeroU32::new(crypto_bench::pbkdf2::ITERATIONS).unwrap(),
                                  crypto_bench::pbkdf2::SALT,
                                  crypto_bench::pbkdf2::PASSWORD, &mut out));
 
     pbkdf2_bench!(hmac_sha512_256, crypto_bench::SHA512_256_OUTPUT_LEN, out,
                   pbkdf2::derive(&digest::SHA512_256,
-                                 crypto_bench::pbkdf2::ITERATIONS,
+                                 NonZeroU32::new(crypto_bench::pbkdf2::ITERATIONS).unwrap(),
                                  crypto_bench::pbkdf2::SALT,
                                  crypto_bench::pbkdf2::PASSWORD, &mut out));
-
 }
 
 mod signature {
@@ -161,7 +152,7 @@ mod signature {
             let rng = rand::SystemRandom::new();
             let key_pair = signature::Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
             let key_pair = signature::Ed25519KeyPair::from_pkcs8(
-                untrusted::Input::from(&key_pair)).unwrap();
+                untrusted::Input::from(key_pair.as_ref())).unwrap();
             b.iter(|| {
                 let signature = key_pair.sign(b"");
                 let _ = signature.as_ref();

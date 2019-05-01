@@ -5,6 +5,8 @@ use crypto_bench;
 use ring::aead;
 use ring::rand::SecureRandom;
 use test;
+use ring::aead::{Nonce, Aad};
+use crypto_bench::aead::NONCE;
 
 fn generate_sealing_key(algorithm: &'static aead::Algorithm, rng: &SecureRandom)
                         -> Result<aead::SealingKey, ()> {
@@ -25,7 +27,8 @@ fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
 
     let key = generate_sealing_key(algorithm, rng).unwrap();
     b.iter(|| {
-        aead::seal_in_place(&key, &crypto_bench::aead::NONCE, ad, &mut in_out,
+        let nonce: Nonce = Nonce::try_assume_unique_for_key(&NONCE).unwrap();
+        aead::seal_in_place(&key, nonce, Aad::from(ad), &mut in_out,
                             out_suffix_capacity).unwrap();
 
 
