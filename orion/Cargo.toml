@@ -10,4 +10,4 @@ path = "orion.rs"
 path = "../crypto_bench"
 
 [dependencies]
-orion = "0.12.5"
+orion = "0.14.0"

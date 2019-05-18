@@ -14,7 +14,7 @@ mod aead {
             fn $benchmark_name(b: &mut test::Bencher) {
                 use $sealer::{seal, SecretKey, Nonce};
                 b.bytes = $input_len as u64;
-                let key = SecretKey::generate().unwrap();
+                let key = SecretKey::generate();
 
                 let nonce = match $nonce_size {
                     12 => Nonce::from_slice(&crypto_bench::aead::NONCE).unwrap(), // ChaCha20Poly1305.
@@ -37,43 +37,43 @@ mod aead {
                       crypto_bench::aead::TLS12_FINISHED_LEN,
                       &crypto_bench::aead::TLS12_AD,
                       orion::hazardous::aead::chacha20poly1305,
-                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+                      orion::hazardous::stream::chacha20::IETF_CHACHA_NONCESIZE);
     orion_aead_bench!(chacha20poly1305_tls13_finished,
                       crypto_bench::aead::TLS13_FINISHED_LEN,
                       &crypto_bench::aead::TLS13_AD,
                       orion::hazardous::aead::chacha20poly1305,
-                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+                      orion::hazardous::stream::chacha20::IETF_CHACHA_NONCESIZE);
             
     // For comparison with BoringSSL.
     orion_aead_bench!(chacha20poly1305_tls12_16,
                       16,
                       &crypto_bench::aead::TLS12_AD,
                       orion::hazardous::aead::chacha20poly1305,
-                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+                      orion::hazardous::stream::chacha20::IETF_CHACHA_NONCESIZE);
 
     // ~1 packet of data in TLS.
     orion_aead_bench!(chacha20poly1305_tls12_1350, 
                       1350,
                       &crypto_bench::aead::TLS12_AD,
                       orion::hazardous::aead::chacha20poly1305,
-                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+                      orion::hazardous::stream::chacha20::IETF_CHACHA_NONCESIZE);
     orion_aead_bench!(chacha20poly1305_tls13_1350,
                       1350,
                       &crypto_bench::aead::TLS13_AD,
                       orion::hazardous::aead::chacha20poly1305,
-                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+                      orion::hazardous::stream::chacha20::IETF_CHACHA_NONCESIZE);
 
     // For comparison with BoringSSL.
     orion_aead_bench!(chacha20poly1305_tls12_8192, 
                       8192,
                       &crypto_bench::aead::TLS12_AD,
                       orion::hazardous::aead::chacha20poly1305,
-                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+                      orion::hazardous::stream::chacha20::IETF_CHACHA_NONCESIZE);
     orion_aead_bench!(chacha20poly1305_tls13_8192,
                       8192,
                       &crypto_bench::aead::TLS13_AD,
                       orion::hazardous::aead::chacha20poly1305,
-                      orion::hazardous::constants::IETF_CHACHA_NONCESIZE);
+                      orion::hazardous::stream::chacha20::IETF_CHACHA_NONCESIZE);
 
     // XChaCha20Poly1305
 
@@ -81,19 +81,19 @@ mod aead {
                       16,
                       &[0u8; 0],
                       orion::hazardous::aead::xchacha20poly1305,
-                      orion::hazardous::constants::XCHACHA_NONCESIZE);
+                      orion::hazardous::stream::xchacha20::XCHACHA_NONCESIZE);
 
     orion_aead_bench!(xchacha20poly1305_1350, 
                       1350,
                       &[0u8; 0],
                       orion::hazardous::aead::xchacha20poly1305,
-                      orion::hazardous::constants::XCHACHA_NONCESIZE);
+                      orion::hazardous::stream::xchacha20::XCHACHA_NONCESIZE);
 
     orion_aead_bench!(xchacha20poly1305_8192, 
                       8192,
                       &[0u8; 0],
                       orion::hazardous::aead::xchacha20poly1305,
-                      orion::hazardous::constants::XCHACHA_NONCESIZE);
+                      orion::hazardous::stream::xchacha20::XCHACHA_NONCESIZE);
 }
 
 mod digest {
