@@ -20,8 +20,8 @@ mod agreement {
                 fn generate_key_pair(b: &mut test::Bencher) {
                     let rng = rand::SystemRandom::new();
                     b.iter(|| {
-                        let private_key = agreement::EphemeralPrivateKey::
-                                            generate($alg, &rng).unwrap();
+                        let private_key =
+                            agreement::EphemeralPrivateKey::generate($alg, &rng).unwrap();
                         let _ = test::black_box(private_key.compute_public_key().unwrap());
                     });
                 }
@@ -30,8 +30,7 @@ mod agreement {
                 fn generate_private_key(b: &mut test::Bencher) {
                     let rng = rand::SystemRandom::new();
                     b.iter(|| {
-                        let _ = agreement::EphemeralPrivateKey::
-                                    generate($alg, &rng).unwrap();
+                        let _ = agreement::EphemeralPrivateKey::generate($alg, &rng).unwrap();
                     });
                 }
 
@@ -46,9 +45,7 @@ mod agreement {
                     let rng = rand::SystemRandom::new();
 
                     // These operations are done by the peer.
-                    let b_private =
-                        agreement::EphemeralPrivateKey::generate($alg, &rng)
-                            .unwrap();
+                    let b_private = agreement::EphemeralPrivateKey::generate($alg, &rng).unwrap();
                     let b_public = b_private.compute_public_key().unwrap();
                     let b_public = agreement::UnparsedPublicKey::new($alg, b_public.as_ref());
 
@@ -56,23 +53,19 @@ mod agreement {
                         // These operations are all done in the
                         // `generate_key_pair` step.
                         let a_private =
-                            agreement::EphemeralPrivateKey::generate($alg, &rng)
-                                .unwrap();
+                            agreement::EphemeralPrivateKey::generate($alg, &rng).unwrap();
                         let _a_public = a_private.compute_public_key().unwrap();
-                        agreement::agree_ephemeral(a_private, &b_public, (), |_| {
-                            Ok(())
-                        }).unwrap();
+                        agreement::agree_ephemeral(a_private, &b_public, (), |_| Ok(())).unwrap();
                     });
                 }
             }
-        }
+        };
     }
 
     ring_agreement_benches!(p256, &agreement::ECDH_P256);
     ring_agreement_benches!(p384, &agreement::ECDH_P384);
     ring_agreement_benches!(x25519, &agreement::X25519);
 }
-
 
 mod digest {
     macro_rules! ring_digest_benches {
@@ -83,7 +76,7 @@ mod digest {
                     let _ = digest::digest($algorithm, &input);
                 });
             }
-        }
+        };
     }
 
     ring_digest_benches!(sha1, &digest::SHA1_FOR_LEGACY_USE_ONLY);
@@ -96,23 +89,44 @@ mod pbkdf2 {
     use crypto_bench;
     use ring::pbkdf2;
 
-    pbkdf2_bench!(hmac_sha256, crypto_bench::SHA256_OUTPUT_LEN, out,
-                  pbkdf2::derive(pbkdf2::PBKDF2_HMAC_SHA256,
-                                 crypto_bench::pbkdf2::ITERATIONS,
-                                 &crypto_bench::pbkdf2::SALT,
-                                 crypto_bench::pbkdf2::PASSWORD, &mut out));
+    pbkdf2_bench!(
+        hmac_sha256,
+        crypto_bench::SHA256_OUTPUT_LEN,
+        out,
+        pbkdf2::derive(
+            pbkdf2::PBKDF2_HMAC_SHA256,
+            crypto_bench::pbkdf2::ITERATIONS,
+            &crypto_bench::pbkdf2::SALT,
+            crypto_bench::pbkdf2::PASSWORD,
+            &mut out
+        )
+    );
 
-    pbkdf2_bench!(hmac_sha384, crypto_bench::SHA384_OUTPUT_LEN, out,
-                  pbkdf2::derive(pbkdf2::PBKDF2_HMAC_SHA384,
-                                 crypto_bench::pbkdf2::ITERATIONS,
-                                 crypto_bench::pbkdf2::SALT,
-                                 crypto_bench::pbkdf2::PASSWORD, &mut out));
+    pbkdf2_bench!(
+        hmac_sha384,
+        crypto_bench::SHA384_OUTPUT_LEN,
+        out,
+        pbkdf2::derive(
+            pbkdf2::PBKDF2_HMAC_SHA384,
+            crypto_bench::pbkdf2::ITERATIONS,
+            crypto_bench::pbkdf2::SALT,
+            crypto_bench::pbkdf2::PASSWORD,
+            &mut out
+        )
+    );
 
-    pbkdf2_bench!(hmac_sha512, crypto_bench::SHA512_OUTPUT_LEN, out,
-                  pbkdf2::derive(pbkdf2::PBKDF2_HMAC_SHA512,
-                                 crypto_bench::pbkdf2::ITERATIONS,
-                                 crypto_bench::pbkdf2::SALT,
-                                 crypto_bench::pbkdf2::PASSWORD, &mut out));
+    pbkdf2_bench!(
+        hmac_sha512,
+        crypto_bench::SHA512_OUTPUT_LEN,
+        out,
+        pbkdf2::derive(
+            pbkdf2::PBKDF2_HMAC_SHA512,
+            crypto_bench::pbkdf2::ITERATIONS,
+            crypto_bench::pbkdf2::SALT,
+            crypto_bench::pbkdf2::PASSWORD,
+            &mut out
+        )
+    );
 }
 
 mod signature {
@@ -134,8 +148,7 @@ mod signature {
         fn sign_empty(b: &mut test::Bencher) {
             let rng = rand::SystemRandom::new();
             let key_pair = signature::Ed25519KeyPair::generate_pkcs8(&rng).unwrap();
-            let key_pair = signature::Ed25519KeyPair::from_pkcs8(
-                key_pair.as_ref()).unwrap();
+            let key_pair = signature::Ed25519KeyPair::from_pkcs8(key_pair.as_ref()).unwrap();
             b.iter(|| {
                 let signature = key_pair.sign(b"");
                 let _ = signature.as_ref();
