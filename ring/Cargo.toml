@@ -2,6 +2,7 @@
 authors = ["Brian Smith <brian@briansmith.org>"]
 name = "crypto_bench_ring"
 version = "0.1.0"
+edition = "2018"
 
 [lib]
 name = "crypto_bench_ring"
@@ -9,5 +10,4 @@ path = "ring.rs"
 
 [dependencies]
 crypto_bench = { path = "../crypto_bench" }
-ring = "0.13"
-untrusted = "0.6"
+ring = "0.15.0-alpha6"

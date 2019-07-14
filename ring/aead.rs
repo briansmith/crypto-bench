@@ -1,20 +1,32 @@
 // TODO: The BoringSSL benchmarks align the input/output buffers to 16-bytes
 // boundaries. Should we?
 
-use crypto_bench;
-use ring::aead;
-use ring::rand::SecureRandom;
-use test;
+use ring::{aead::{self, BoundKey}, error, rand};
 
-fn generate_sealing_key(algorithm: &'static aead::Algorithm, rng: &SecureRandom)
-                        -> Result<aead::SealingKey, ()> {
+struct NonceSequence(u64);
+impl NonceSequence {
+    fn new() -> Self { Self(0) }
+}
+
+impl aead::NonceSequence for NonceSequence {
+    fn advance(&mut self) -> Result<aead::Nonce, error::Unspecified> {
+        let mut result = [0u8; aead::NONCE_LEN];
+        result[4..].copy_from_slice(&u64::to_be_bytes(self.0));
+        self.0 = self.0.checked_add(1).ok_or(error::Unspecified)?;
+        Ok(aead::Nonce::assume_unique_for_key(result))
+    }
+}
+
+fn generate_sealing_key(algorithm: &'static aead::Algorithm, rng: &dyn rand::SecureRandom)
+                        -> Result<aead::SealingKey<NonceSequence>, error::Unspecified> {
     let mut key_bytes = vec![0u8; algorithm.key_len()];
-    try!(rng.fill(&mut key_bytes).map_err(|_| ()));
-    aead::SealingKey::new(algorithm, &key_bytes).map_err(|_| ())
+    rng.fill(&mut key_bytes)?;
+    let key = aead::UnboundKey::new(algorithm, &key_bytes)?;
+    Ok(aead::SealingKey::new(key, NonceSequence::new()))
 }
 
 fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
-                       rng: &SecureRandom,
+                       rng: &dyn rand::SecureRandom,
                        chunk_len: usize, aad: &[u8],
                        b: &mut test::Bencher) {
     let out_suffix_capacity = algorithm.tag_len();
@@ -23,12 +35,10 @@ fn seal_in_place_bench(algorithm: &'static aead::Algorithm,
     // XXX: This is a little misleading when `ad` isn't empty.
     b.bytes = chunk_len as u64;
 
-    let key = generate_sealing_key(algorithm, rng).unwrap();
+    let mut key = generate_sealing_key(algorithm, rng).unwrap();
     b.iter(|| {
-        let nonce = aead::Nonce::assume_unique_for_key(crypto_bench::aead::NONCE);
         let aad = aead::Aad::from(aad);
-        aead::seal_in_place(&key, nonce, aad, &mut in_out,
-                            out_suffix_capacity).unwrap();
+        key.seal_in_place(aad, &mut in_out,out_suffix_capacity).unwrap();
 
 
     });
@@ -51,7 +61,6 @@ macro_rules! ring_seal_in_place_benches {
     ( $name:ident, $algorithm:expr ) => {
         mod $name {
             use crypto_bench;
-            use test;
 
             // A TLS 1.2 finished message.
             ring_seal_in_place_bench!(tls12_finished, $algorithm,
