@@ -107,21 +107,21 @@ mod pbkdf2 {
         let mut mac = hmac::Hmac::new(sha1::Sha1::new(),
                                       &crypto_bench::pbkdf2::PASSWORD);
         pbkdf2::pbkdf2(&mut mac, &crypto_bench::pbkdf2::SALT,
-                       crypto_bench::pbkdf2::ITERATIONS, &mut out);
+                       crypto_bench::pbkdf2::ITERATIONS.into(), &mut out);
     });
 
     pbkdf2_bench!(hmac_sha256, 32, out, {
         let mut mac = hmac::Hmac::new(sha2::Sha256::new(),
                                       &crypto_bench::pbkdf2::PASSWORD);
         pbkdf2::pbkdf2(&mut mac, &crypto_bench::pbkdf2::SALT,
-                       crypto_bench::pbkdf2::ITERATIONS, &mut out);
+                       crypto_bench::pbkdf2::ITERATIONS.into(), &mut out);
     });
 
     pbkdf2_bench!(hmac_sha512, 64, out, {
         let mut mac = hmac::Hmac::new(sha2::Sha512::new(),
                                       &crypto_bench::pbkdf2::PASSWORD);
         pbkdf2::pbkdf2(&mut mac, &crypto_bench::pbkdf2::SALT,
-                       crypto_bench::pbkdf2::ITERATIONS, &mut out);
+                       crypto_bench::pbkdf2::ITERATIONS.into(), &mut out);
     });
 }
 

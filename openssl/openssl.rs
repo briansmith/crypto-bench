@@ -37,10 +37,11 @@ mod pbkdf2 {
     use test;
 
     pbkdf2_bench!(hmac_sha256, 20, out, {
+        let iterations: u32 = crypto_bench::pbkdf2::ITERATIONS.into();
         let _ = openssl::pkcs5::pbkdf2_hmac(
                     crypto_bench::pbkdf2::PASSWORD, 
                     &crypto_bench::pbkdf2::SALT,
-                    crypto_bench::pbkdf2::ITERATIONS as usize, 
+                    iterations as usize,
                     openssl::hash::MessageDigest::sha256(),
                     &mut out);
     });
