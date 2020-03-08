@@ -48,7 +48,7 @@ fn seal_in_place_bench(
     let mut key = generate_sealing_key(algorithm, rng).unwrap();
     b.iter(|| {
         let aad = aead::Aad::from(aad);
-        key.seal_in_place(aad, &mut in_out, out_suffix_capacity)
+        key.seal_in_place_append_tag(aad, &mut in_out)
             .unwrap();
     });
 }

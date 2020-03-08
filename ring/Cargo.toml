@@ -10,4 +10,4 @@ path = "ring.rs"
 
 [dependencies]
 crypto_bench = { path = "../crypto_bench" }
-ring = "0.15.0-alpha6"
+ring = "0.16.11"
